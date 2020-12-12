@@ -1,6 +1,7 @@
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
+const { isObject } = require("util");
 const index = require("./routes/index");
 
 const port = process.env.PORT || 4001;
@@ -36,12 +37,12 @@ io.on("connection", (socket) => {
   });
 
 
-  socket.on('get_current_players' , (roomcode, callback) => {
+  socket.on('get_current_players' , (roomcode) => {
 
     // const players = ['j', 'k', 'l']
     
 
-    callback(getUsersFromRoom(roomcode))
+    io.to(roomcode).emit("send_current_players", getUsersFromRoom(roomcode));
     // socket.emit("send_current_players", getUsersFromRoom(roomcode));
     // socket.emit("send_current_players", [...socket.adapter.rooms.get(roomcode).keys()]);
   })
