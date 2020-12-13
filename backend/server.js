@@ -1,7 +1,6 @@
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
-const { isObject } = require("util");
 const index = require("./routes/index");
 
 const port = process.env.PORT || 4001;
@@ -49,10 +48,29 @@ io.on("connection", (socket) => {
 
   socket.on('player_disconnect', (roomcode) => {
 
-    socketRooms.get(roomcode).delete(socket.id)
-    if (socketRooms.get(roomcode).size === 0) {
+    console.log("player_disconnect listener triggered")
+    
+    room = socketRooms.get(roomcode)
+    room.forEach((socketObj) => {
+      
+      
+      if (socketObj.socketId = socket.id) {
+        
+        const res = room.delete(socketObj);
+        console.log(res)
+      }
+
+      
+    });
+    
+   
+    if (room.size === 0) {
       socketRooms.delete(roomcode);
     }
+
+    
+
+    io.to(roomcode).emit("send_current_players", getUsersFromRoom(roomcode));
   });
 
 
@@ -62,8 +80,7 @@ io.on("connection", (socket) => {
     console.log('\x1bc')
     console.log("-------DEBUG-------")
 
-    console.log(socket.id);
-
+    console.log(socketRooms);
 
     console.log("-------------------")
   });
@@ -83,7 +100,11 @@ function addUserToRoom(roomCode, socketObj){
 }
 
 function getUsersFromRoom(roomCode){
-  return [...socketRooms.get(roomCode).keys()]
+  room = socketRooms.get(roomCode)
+  // if (room === undefined || room.size === 0) {
+  //   return []
+  // }
+  return [...room.keys()]
 }
 
 
