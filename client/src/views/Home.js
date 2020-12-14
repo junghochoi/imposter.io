@@ -12,7 +12,11 @@ export class Home extends Component {
 
 	handleChange = (event) => {
 		this.setState({ [event.target.name]: event.target.value });
-	};
+    };
+    
+    componentWillUnmount() {
+        console.log("Home is Unmounting")
+	}
 
 	render() {
 		return (
@@ -38,6 +42,17 @@ export class Home extends Component {
 				>
 					Create new Lobby
 				</Link>
+
+                <Link
+                    to={{
+                        pathname: `/game/${this.state.roomcode}/join`,
+                        state:{
+                            playerName: this.state.name
+                        }
+                    }}
+                >    
+                    Join Lobby
+                </Link>
 			</div>
 		);
 	}

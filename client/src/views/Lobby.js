@@ -17,6 +17,7 @@ export class Lobby extends Component {
 	}
 
 	componentWillUnmount() {
+        console.log("Lobby Unmounting")
         const { roomCode } = this.props.match.params;
     
 		socket.emit(LEAVE_LOBBY, roomCode);
