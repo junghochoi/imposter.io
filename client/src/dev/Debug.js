@@ -1,5 +1,5 @@
 import React from 'react'
-import socket from '../socket'
+import socket from '../Socket'
 function Debug() {
 
     const debug = () => {

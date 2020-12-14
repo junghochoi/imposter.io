@@ -1,54 +1,42 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 import {
-    BrowserRouter as Router,
-    Route,
-    Switch,
-    Redirect
+	BrowserRouter as Router,
+	Route,
+	Switch,
+	Redirect,
+} from "react-router-dom";
 
-} from 'react-router-dom'
+import socket from "../Socket";
 
-import socket from '../socket';
+import HomeScreen from "../views/Home";
+import LobbyScreen from "../views/Lobby";
+import Debug from "../dev/Debug";
+import { JOIN_LOBBY } from '../Events'
 
-
-import HomeScreen from '../views/Home'
-import LobbyScreen from '../views/Lobby'
-import Debug from '../dev/Debug'
 export class Root extends Component {
+	createLobby = () => {
+		const lobbyCode = "abcde"; // Randomly Generate Unique code
+		socket.emit(JOIN_LOBBY, lobbyCode);
+		return <Redirect to={`/game/${lobbyCode}`} />;
+	};
 
+	render() {
+		return (
+			<Router>
+				<Switch>
+					<Route exact path="/" component={HomeScreen} />
 
-
-    createLobby = () => {
-        const lobbyCode = 'abcde'; // Randomly Generate Unique code
-
-        // console.log(this.props.location.playerName)
-        // socket.playerName = "nick"
-        socket.emit('join', lobbyCode);
-        return <Redirect to={`/game/${lobbyCode}`}/>
-
-    }
-
-    render() {
-        return (
-
-            <Router>
-                <Switch>
-                    
-                    <Route exact path='/' component={HomeScreen} />
-                    
-                    <Route exact path='/game/new' render={this.createLobby} />
-                    <Route exact path= '/game/:id' component={LobbyScreen} />
-                    
-
-                    
-                </Switch>
-                <Debug />
-            </Router>
-                
-
-            
-
-        )
-    }
+					<Route exact path="/game/new" render={this.createLobby} />
+					<Route
+						exact
+						path="/game/:roomCode"
+						component={LobbyScreen}
+					/>
+				</Switch>
+				<Debug />
+			</Router>
+		);
+	}
 }
 
-export default Root
+export default Root;
