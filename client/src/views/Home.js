@@ -6,7 +6,7 @@ export class Home extends Component {
 		super(props);
 		this.state = {
 			name: "",
-			roomcode: "",
+			roomCode: "",
 		};
 	}
 
@@ -28,7 +28,7 @@ export class Home extends Component {
 				<label>Room Code</label>
 				<input
 					type="text"
-					name="roomcode"
+					name="roomCode"
 					onChange={this.handleChange}
 				/>
 
@@ -45,9 +45,10 @@ export class Home extends Component {
 
                 <Link
                     to={{
-                        pathname: `/game/${this.state.roomcode}/join`,
+                        pathname: `/game/${this.state.roomCode}/join`,
                         state:{
-                            playerName: this.state.name
+							playerName: this.state.name,
+							roomCode: this.state.roomCode
                         }
                     }}
                 >    

@@ -9,21 +9,51 @@ import {
 import socket from "../Socket";
 
 import HomeScreen from "../views/Home";
-import LobbyScreen from "../views/Lobby";
+import GameWrapper from "./GameWrapper";
+
 import Debug from "../dev/Debug";
-import { JOIN_LOBBY } from '../Events';
-import { generateRoomCode } from '../Utilities';
+import { CREATE_AND_JOIN_LOBBY, JOIN_LOBBY, LOBBY_EXISTS } from "../Events";
+import { generateRoomCode } from "../Utilities";
+
 
 export class Root extends Component {
-	createLobbyAndRedirect = () => {
+	createLobbyAndRedirect = (formData) => {
+		const { playerName } = formData;
 		const roomCode = generateRoomCode(); // Randomly Generate Unique code
-		socket.emit(JOIN_LOBBY, roomCode);
-		return <Redirect to={`/game/${roomCode}`} />;
-    };
+		socket.emit(CREATE_AND_JOIN_LOBBY, roomCode, playerName);
+		
+		return  (
+			<Redirect
+				to={{
+					pathname: `/game/${roomCode}`,
+					state: { 
+						roomCode: roomCode,
+						playerName: "bob"
+					}
+				}}
+			/>
+		)
+	
+	};
 
-    joinLobbyAndRedirect = (roomCode) => {
-        
-    }
+	
+	joinLobbyAndRedirect = (formData) => {
+		const { playerName, roomCode } = formData;
+		socket.emit(JOIN_LOBBY, roomCode);
+		return (
+			<Redirect
+				to={{
+					pathname: `/game/${roomCode}`,
+					state: { 
+						roomCode: roomCode,
+						playerName: playerName 
+					}
+				}}
+			/>
+		);
+	};
+
+
 
 	render() {
 		return (
@@ -31,15 +61,34 @@ export class Root extends Component {
 				<Switch>
 					<Route exact path="/" component={HomeScreen} />
 
-					<Route exact path="/game/new" render={this.createLobbyAndRedirect} />
-                    <Route exact path="/game/:id/join" render={this.joinLobbyAndRedirect} />
+					<Route
+						exact
+						path="/game/new"
+						render={this.createLobbyAndRedirect}
+					/>
+					<Route
+						exact
+						path="/game/:id/join"
+						render={(routeProps) => {
+							
+							const redirectComponent = this.joinLobbyAndRedirect(
+								routeProps.location.state
+							);
+							
+							return redirectComponent;
+						}}
+					/>
 					<Route
 						exact
 						path="/game/:roomCode"
-						component={LobbyScreen}
+						render={(routeProps) => {
+							const props  = routeProps.location.state;
+						
+							
+							return <GameWrapper {...props}/>
+						}}	
 					/>
-                
-                </Switch>
+				</Switch>
 				<Debug />
 			</Router>
 		);

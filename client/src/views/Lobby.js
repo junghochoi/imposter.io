@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import socket from "../Socket";
-import { LEAVE_LOBBY, UPDATE_PLAYER_LIST } from "../Events";
+import { LEAVE_LOBBY, UPDATE_PLAYER_LIST, GET_PLAYER_LIST } from "../Events";
 export class Lobby extends Component {
 	constructor(props) {
 		super(props);
@@ -10,15 +10,22 @@ export class Lobby extends Component {
 		};
 	}
 
+
+	// updatePlayers = players => this.setState({players});
 	componentDidMount() {
-		socket.on(UPDATE_PLAYER_LIST, (players) => {
-			this.setState({ players });
+		console.log("Lobby is Mounting")
+		socket.emit(GET_PLAYER_LIST, this.props.roomCode, (players)=>{
+			this.setState({players});
 		});
+		socket.on(UPDATE_PLAYER_LIST, (players)=>{
+			this.setState({players});
+		});
+	
 	}
 
 	componentWillUnmount() {
         console.log("Lobby Unmounting")
-        const { roomCode } = this.props.match.params;
+        const roomCode  = this.props.roomCode;
     
 		socket.emit(LEAVE_LOBBY, roomCode);
 	}
@@ -27,7 +34,7 @@ export class Lobby extends Component {
 		const namesList = this.state.players.map((socketObj) => (
 			<li key={socketObj.socketId}>{socketObj.socketId}</li>
 		));
-		const { roomCode } = this.props.match.params;
+		const roomCode = this.props.roomCode;
 
 		return (
 			<div>
