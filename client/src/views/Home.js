@@ -5,7 +5,7 @@ export class Home extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: "",
+			playerName: "",
 			roomCode: "",
 		};
 	}
@@ -14,29 +14,23 @@ export class Home extends Component {
 		this.setState({ [event.target.name]: event.target.value });
     };
     
-    componentWillUnmount() {
-        console.log("Home is Unmounting")
-	}
+
 
 	render() {
 		return (
 			<div>
 				<h1>Home Page</h1>
 				<label>Name</label>
-				<input type="text" name="name" onChange={this.handleChange} />
+				<input type="text" name="playerName" onChange={this.handleChange} />
 
 				<label>Room Code</label>
-				<input
-					type="text"
-					name="roomCode"
-					onChange={this.handleChange}
-				/>
+				<input type="text" name="roomCode" onChange={this.handleChange}/>
 
 				<Link
 					to={{
 						pathname: "/game/new",
 						state: {
-							playerName: this.state.name,
+							playerName: this.state.playerName,
 						},
 					}}
 				>
@@ -47,7 +41,7 @@ export class Home extends Component {
                     to={{
                         pathname: `/game/${this.state.roomCode}/join`,
                         state:{
-							playerName: this.state.name,
+							playerName: this.state.playerName,
 							roomCode: this.state.roomCode
                         }
                     }}

@@ -32,7 +32,7 @@ export class Lobby extends Component {
 
 	render() {
 		const namesList = this.state.players.map((socketObj) => (
-			<li key={socketObj.socketId}>{socketObj.socketId}</li>
+			<li key={socketObj.socketId}>{socketObj.playerName}</li>
 		));
 		const roomCode = this.props.roomCode;
 
