@@ -12,7 +12,7 @@ import HomeScreen from "../views/Home";
 import GameWrapper from "./GameWrapper";
 
 import Debug from "../dev/Debug";
-import { CREATE_AND_JOIN_LOBBY, JOIN_LOBBY, IO_DISCONNECT } from "../Events";
+import { CREATE_AND_JOIN_LOBBY, JOIN_LOBBY } from "../Events";
 import { generateRoomCode } from "../Utilities";
 
 
@@ -35,7 +35,7 @@ export class Root extends Component {
 			const errorPlayerName = playerName === undefined || playerName === '';
 			const errorRoomCode   = roomCode   === undefined || roomCode   === '';
 			if (errorPlayerName|| errorRoomCode ) {
-				console.log("error prevented")
+				alert("Enter a name OR Enter Valid Room Code");
 				return true;
 			}
 			return false;
