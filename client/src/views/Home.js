@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { 
+	MenuLinkButton, 
+	MenuInput,
+	Heading, 
+	Container,
+	HomeMenu 
+	
+} from "../styled/Lib";
 
 export class Home extends Component {
 	constructor(props) {
@@ -19,35 +26,51 @@ export class Home extends Component {
 	render() {
 		return (
 			<div>
-				<h1>Home Page</h1>
-				<label>Name</label>
-				<input type="text" name="playerName" onChange={this.handleChange} />
+				<Heading> Imposter.io </Heading>
 
-				<label>Room Code</label>
-				<input type="text" name="roomCode" onChange={this.handleChange}/>
+				<Container>
+					<HomeMenu>
+						
+						<MenuInput
+							type="text" name="playerName" placeholder="Name" onChange={this.handleChange}
+						/>
+						<MenuInput 
+							type="text" name="roomCode" placeholder="Room Code" onChange={this.handleChange}
+						/>
+						
 
-				<Link
-					to={{
-						pathname: "/game/new",
-						state: {
-							playerName: this.state.playerName,
-						},
-					}}
-				>
-					Create new Lobby
-				</Link>
 
-                <Link
-                    to={{
-                        pathname: `/game/${this.state.roomCode}/join`,
-                        state:{
-							playerName: this.state.playerName,
-							roomCode: this.state.roomCode
-                        }
-                    }}
-                >    
-                    Join Lobby
-                </Link>
+
+						<MenuLinkButton
+							to={{
+								pathname: "/game/new",
+								state: {
+									playerName: this.state.playerName,
+								},
+							}}
+						>
+							Create new Lobby
+						</MenuLinkButton>
+
+						<MenuLinkButton
+							to={{
+								pathname: `/game/${this.state.roomCode}/join`,
+								state:{
+									playerName: this.state.playerName,
+									roomCode: this.state.roomCode
+								}
+							}}
+						>    
+							Join Lobby
+						</MenuLinkButton>
+					</HomeMenu>
+
+				</Container>
+	
+
+
+		
+
 			</div>
 		);
 	}
