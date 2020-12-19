@@ -2,6 +2,7 @@ import React , { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import Loading from '../views/Loading';
 import Lobby from '../views/Lobby';
+import ErrorBoundary from '../containers/ErrorBoundary';
 
 import socket from '../Socket';
 
@@ -21,14 +22,21 @@ function GameWrapper(props) {
     }, [lobbyExists, roomCode]);
 
 
-    if (lobbyExists === null) {
-        return <Loading />
-    } else if (lobbyExists === false) {
-        return <Redirect to='/' />
-    } else {
-        return <Lobby {...props} playerName={playerName}/>
-    }
 
+    let content = null;
+    if (lobbyExists === null) {
+        content =  <Loading />
+    } else if (lobbyExists === false) {
+        content =  <Redirect to='/' />
+    } else {
+        content =  <Lobby {...props} playerName={playerName}/>
+    }
+    return (
+        <ErrorBoundary>
+            {content}
+        </ErrorBoundary>
+
+    );
 
 }
 

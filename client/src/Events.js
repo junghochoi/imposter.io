@@ -1,5 +1,10 @@
 module.exports = {
+    IO_DISCONNECT: 'disconnect',
+    IO_DISCONNECTING: 'disconnecting',
+
+
     CREATE_AND_JOIN_LOBBY: "CREATE_AND_JOIN_LOBBY",
+    
     JOIN_LOBBY: "JOIN_LOBBY",
     LEAVE_LOBBY: "LEAVE_LOBBY",
     UPDATE_PLAYER_LIST: "UPDATE_PLAYER_LIST",

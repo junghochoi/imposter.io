@@ -12,18 +12,30 @@ import HomeScreen from "../views/Home";
 import GameWrapper from "./GameWrapper";
 
 import Debug from "../dev/Debug";
-import { CREATE_AND_JOIN_LOBBY, JOIN_LOBBY } from "../Events";
+import { CREATE_AND_JOIN_LOBBY, JOIN_LOBBY, IO_DISCONNECT } from "../Events";
 import { generateRoomCode } from "../Utilities";
 
 
 export class Root extends Component {
 
+
+	componentDidMount() {
+		
+		socket.on("SOCKET_DISCONNECT", ()=>{
+			window.location.href = '/';
+		});
+	}
+	/*
+		 Prevent Error - If the invalid data is entered in the home Screen
+		 return True
+	*/
 	preventError = (formData) => {
 		if (formData !== undefined || formData !== null) {
 			const { playerName, roomCode } = formData; 
 			const errorPlayerName = playerName === undefined || playerName === '';
 			const errorRoomCode   = roomCode   === undefined || roomCode   === '';
 			if (errorPlayerName|| errorRoomCode ) {
+				console.log("error prevented")
 				return true;
 			}
 			return false;
@@ -45,7 +57,7 @@ export class Root extends Component {
 					pathname: `/game/${roomCode}`,
 					state: { 
 						roomCode: roomCode,
-						playerName: "bob"
+						playerName: playerName
 					}
 				}}
 			/>
@@ -85,6 +97,7 @@ export class Root extends Component {
 						render={(routeProps) => {
 							
 							const props  = routeProps.location.state;
+
 							return <GameWrapper {...props}/>
 						}}	
 					/>

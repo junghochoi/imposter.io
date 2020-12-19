@@ -33,9 +33,11 @@ export class Home extends Component {
 						
 						<MenuInput
 							type="text" name="playerName" placeholder="Name" onChange={this.handleChange}
+							autoComplete="off"
 						/>
 						<MenuInput 
 							type="text" name="roomCode" placeholder="Room Code" onChange={this.handleChange}
+							autoComplete="off"
 						/>
 						
 
