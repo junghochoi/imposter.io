@@ -15,10 +15,16 @@ class Room {
         this.addUser(socketObj);
     }
 
-  
+    setSettings = (newSettings) => {
+        this.settings = newSettings
+    }
+
+    getSettings = () => {
+        return this.settings;
+    }
 
     getRoomSize = () =>{
-        return this.playerSet.size();
+        return this.playerSet.size;
     }
 
     addUser = (socketObj) => {
@@ -27,7 +33,6 @@ class Room {
 
     getUsersFromRoom = () => {
         const res = [...this.playerSet.keys()]
-        console.log(res)
         return res;
     }
 

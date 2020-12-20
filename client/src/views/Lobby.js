@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import socket from "../Socket";
-import { LEAVE_LOBBY, UPDATE_PLAYER_LIST, GET_PLAYER_LIST } from "../Events";
+import { 
+	LEAVE_LOBBY, 
+	UPDATE_PLAYER_LIST, 
+	GET_PLAYER_LIST,
+	UPDATE_LOBBY_SETTINGS,
+	GET_LOBBY_SETTINGS,
+	SUBMIT_LOBBY_SETTINGS } from "../Events";
 
 import { Container, Heading } from '../styled/Lib';
 
@@ -20,6 +26,9 @@ export class Lobby extends Component {
 	}
 
 	componentDidMount() {
+
+
+		
 		socket.emit(GET_PLAYER_LIST, this.props.roomCode, (players)=>{
 			const currPlayer = players.find(socketObj => socketObj.socketId === socket.id);
 			this.setState((prevState) => {
@@ -30,10 +39,21 @@ export class Lobby extends Component {
 				}
 			});
 		});
+		socket.emit(GET_LOBBY_SETTINGS, this.props.roomCode, (settings)=>{
+			this.setState((prevState) => {
+				return {
+					...prevState,
+					settings: settings
+				}
+			});
+		});
 
 		socket.on(UPDATE_PLAYER_LIST, (players)=>{
 			this.setState({players});
 		});
+		socket.on(UPDATE_LOBBY_SETTINGS, (settings)=>{
+			this.setState({settings});
+		})
 	
 	}
 	componentWillUnmount() {
@@ -51,7 +71,10 @@ export class Lobby extends Component {
 					[event.target.name]: event.target.value,
 				}
 			}
+		}, () => {
+			socket.emit(SUBMIT_LOBBY_SETTINGS, this.props.roomCode, this.state.settings );
 		});
+		
 
     };
 

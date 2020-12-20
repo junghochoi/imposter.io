@@ -8,6 +8,9 @@ const {
 	CREATE_AND_JOIN_LOBBY,
 	IO_DISCONNECT,
 	IO_DISCONNECTING,
+	SUBMIT_LOBBY_SETTINGS,
+	UPDATE_LOBBY_SETTINGS,
+	GET_LOBBY_SETTINGS
 } = require("../client/src/Events");
 const Room = require('./Room');
 
@@ -26,11 +29,7 @@ module.exports = (socket) => {
 	});
 
 	socket.on(GET_PLAYER_LIST, (roomCode, callback) => {
-
-		
 		let room = socketRooms.get(roomCode);
-		console.log(roomCode);
-		console.log(room)
 		if (room === undefined || room.size === 0) {
 			callback([]);
 		} else {
@@ -68,6 +67,14 @@ module.exports = (socket) => {
 		callback(socketRooms.has(roomCode));
 	});
 
+	socket.on(SUBMIT_LOBBY_SETTINGS, (roomCode, newSettings)=>{
+		socketRooms.get(roomCode).setSettings(newSettings);
+		io.to(roomCode).emit(UPDATE_LOBBY_SETTINGS, newSettings);
+	});
+	socket.on(GET_LOBBY_SETTINGS, (roomCode, callback) => {
+		callback(socketRooms.get(roomCode).getSettings());
+	});
+
 	socket.on("debug", () => {
 		console.log("-------DEBUG-------");
 		console.log(socketRooms);
@@ -79,7 +86,6 @@ module.exports = (socket) => {
 	*/
 
 	const addUserToRoom = (roomCode, socketObj) => {
-		console.log("AddUserToRoom")
 		socket.join(roomCode);
 		if (!socketRooms.has(roomCode)) {
 			let newRoom = new Room(roomCode, socketObj);
