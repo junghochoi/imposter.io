@@ -35,7 +35,7 @@ module.exports = (socket) => {
 	socket.on(CREATE_AND_JOIN_LOBBY, (roomCode, playerName) => {
 		addUserToRoom(roomCode, {
 			socketId: socket.id,
-			playerName: playerName === '' ? "Anonymous" : playerName,
+			playerName: playerName,
 			roomCode: roomCode,
 			host: true,
 		});
