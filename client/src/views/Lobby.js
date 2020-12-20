@@ -8,7 +8,9 @@ import {
 	GET_LOBBY_SETTINGS,
 	SUBMIT_LOBBY_SETTINGS } from "../Events";
 
-import { Container, Heading } from '../styled/Lib';
+import { Container, Heading, LobbyMenu, SettingsContainer } from '../styled/Lib';
+import PlayerCard from '../components/PlayerCard';
+
 
 export class Lobby extends Component {
 	constructor(props) {
@@ -80,59 +82,68 @@ export class Lobby extends Component {
 
 	render() {
 		const namesList = this.state.players.map((socketObj) => (
-			<li key={socketObj.socketId}>{socketObj.playerName}</li>
+			<PlayerCard key={socketObj.socketId} name={socketObj.playerName} />
 		));
 		const roomCode = this.props.roomCode;
 
 		return (
 			<Container>
 				<Heading>Imposter.io</Heading>
-				<h2>Room Code: {roomCode}</h2>
-				<h3>Current Player:  {this.state.currPlayer === null  ?  "unknown" : this.state.currPlayer.playerName}</h3>
-				
-				<div className="flex-container">
-					<div className='settings'>
-						<label>Num Imposters</label>
-						<select 
-							name='numImposters' 
-							value={this.state.settings.numImposters.toString()} 
-							onChange={this.handleSettingChange}
-							disabled={this.state.currPlayer === null ? true : !this.state.currPlayer.host}
-						>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-						</select>
-						<label>Num Tasks</label>
-						<select 
-							name='numTasks'
-							value={this.state.settings.numTasks.toString()} 
-							onChange={this.handleSettingChange}
-							disabled={this.state.currPlayer === null ? true : !this.state.currPlayer.host}
-						>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-						</select>
-						<label>Num Rounds</label>
-						<select 
-							name='numRounds' 
-							value={this.state.settings.numRounds.toString()} 
-							onChange={this.handleSettingChange}
-							disabled={this.state.currPlayer === null ? true : !this.state.currPlayer.host}
-						>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-						</select>
-					</div>
-					<ul>{namesList}</ul>
+				<LobbyMenu>
+					<Container>
+						<h2>Room Code: {roomCode}</h2>
+						<h3>Current Player:  {this.state.currPlayer === null  ?  "unknown" : this.state.currPlayer.playerName}</h3>
+						
+						
+						<SettingsContainer>
+							<label>Num Imposters</label>
+							<select 
+								name='numImposters' 
+								value={this.state.settings.numImposters.toString()} 
+								onChange={this.handleSettingChange}
+								disabled={this.state.currPlayer === null ? true : !this.state.currPlayer.host}
+							>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+							</select>
+							<label>Num Tasks</label>
+							<select 
+								name='numTasks'
+								value={this.state.settings.numTasks.toString()} 
+								onChange={this.handleSettingChange}
+								disabled={this.state.currPlayer === null ? true : !this.state.currPlayer.host}
+							>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+							</select>
+							<label>Num Rounds</label>
+							<select 
+								name='numRounds' 
+								value={this.state.settings.numRounds.toString()} 
+								onChange={this.handleSettingChange}
+								disabled={this.state.currPlayer === null ? true : !this.state.currPlayer.host}
+							>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+							</select>
+						</SettingsContainer>
+						
+					</Container>
 
-				</div>
+					<Container>
+						<ul>{namesList}</ul>
+					</Container>
+				</LobbyMenu>
+
+				
+				
 
 
 			</Container>

@@ -75,3 +75,18 @@ export const MenuLinkButton = styled(Link)`
 	-ms-transition: all 0.2s ease-in-out 0s;
 	transition: all 0.2s ease-in-out 0s;
 `;
+
+/*
+	Lobby.js
+
+*/
+
+export const LobbyMenu = styled.div`
+	display: flex;
+`;
+
+export const SettingsContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+
+`;
