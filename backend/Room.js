@@ -6,43 +6,43 @@ class Room {
         this.host = socketObj;
         this.playerSet = new Set();
         this.settings = {
-            
+             
 			numImposters: 1,
 			numTasks: 3,
             numRounds: 3
 			
         }
         this.addUser(socketObj);
-
     }
 
-    getPlayerSize = () => {
-        
+    setSettings = (newSettings) => {
+        this.settings = newSettings
+    }
+
+    getSettings = () => {
+        return this.settings;
     }
 
     getRoomSize = () =>{
-        return this.playerSet.size();
+        return this.playerSet.size;
     }
 
     addUser = (socketObj) => {
         this.playerSet.add(socketObj);
     }
 
+    getUsersFromRoom = () => {
+        const res = [...this.playerSet.keys()]
+        return res;
+    }
+
     removeUser = (socketId) => {
-        room.forEach((socketObj) => {
+        this.playerSet.forEach((socketObj) => {
 			if (socketObj.socketId === socketId) {
-				room.delete(socketObj);
+                this.playerSet.delete(socketObj);
 			}
 		});
     }
 
 } 
-class Cats extends Animals {
-    constructor(name, age, whiskerColor) {
-        super(name, age);
-        this.whiskerColor = whiskerColor;
-    }
-    whiskers() {
-        return `I have ${this.whiskerColor} whiskers`;
-    }
-}
+module.exports = Room;

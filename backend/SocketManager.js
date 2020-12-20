@@ -8,7 +8,11 @@ const {
 	CREATE_AND_JOIN_LOBBY,
 	IO_DISCONNECT,
 	IO_DISCONNECTING,
+	SUBMIT_LOBBY_SETTINGS,
+	UPDATE_LOBBY_SETTINGS,
+	GET_LOBBY_SETTINGS
 } = require("../client/src/Events");
+const Room = require('./Room');
 
 let socketRooms = new Map();
 
@@ -16,20 +20,21 @@ module.exports = (socket) => {
 	console.log(`Connected: ${socket.id}`);
 	socket.on(IO_DISCONNECT, () => {
 		console.log(`Disconnected: ${socket.id}`);
-
 	});
 
 	socket.on(IO_DISCONNECTING, () => {
-	
 		socket.rooms.forEach((roomCode) => {
 			removeUserFromRoom(roomCode, socket.id);
 		});
-
-		
 	});
 
 	socket.on(GET_PLAYER_LIST, (roomCode, callback) => {
-		callback(getUsersFromRoom(roomCode));
+		let room = socketRooms.get(roomCode);
+		if (room === undefined || room.size === 0) {
+			callback([]);
+		} else {
+			callback(room.getUsersFromRoom());
+		}
 	});
 
 	socket.on(CREATE_AND_JOIN_LOBBY, (roomCode, playerName) => {
@@ -62,6 +67,14 @@ module.exports = (socket) => {
 		callback(socketRooms.has(roomCode));
 	});
 
+	socket.on(SUBMIT_LOBBY_SETTINGS, (roomCode, newSettings)=>{
+		socketRooms.get(roomCode).setSettings(newSettings);
+		io.to(roomCode).emit(UPDATE_LOBBY_SETTINGS, newSettings);
+	});
+	socket.on(GET_LOBBY_SETTINGS, (roomCode, callback) => {
+		callback(socketRooms.get(roomCode).getSettings());
+	});
+
 	socket.on("debug", () => {
 		console.log("-------DEBUG-------");
 		console.log(socketRooms);
@@ -75,37 +88,31 @@ module.exports = (socket) => {
 	const addUserToRoom = (roomCode, socketObj) => {
 		socket.join(roomCode);
 		if (!socketRooms.has(roomCode)) {
-			socketRooms.set(roomCode, new Set().add(socketObj));
+			let newRoom = new Room(roomCode, socketObj);
+			socketRooms.set(roomCode, newRoom);
 		} else {
-			let connectedUsers = socketRooms.get(roomCode);
-			connectedUsers.add(socketObj);
-			socketRooms.set(roomCode, connectedUsers);
+			socketRooms.get(roomCode).addUser(socketObj);
 		}
 		updatePlayerListEmit(roomCode);
 	};
 
 	const removeUserFromRoom = (roomCode, socketId) => {
-		room = socketRooms.get(roomCode);
+		let room = socketRooms.get(roomCode);
 		if (room === undefined || room === null) {
 			return;
 		}
-		room.forEach((socketObj) => {
-			if (socketObj.socketId === socketId) {
-				room.delete(socketObj);
-			}
-		});
-
-		if (room.size === 0) {
+		room.removeUser(socketId);
+		if (room.getRoomSize() === 0) {
 			socketRooms.delete(roomCode);
 		}
 	};
 	const updatePlayerListEmit = (roomCode) =>
 		io.to(roomCode).emit(UPDATE_PLAYER_LIST, getUsersFromRoom(roomCode));
 	const getUsersFromRoom = (roomCode) => {
-		room = socketRooms.get(roomCode);
+		let room = socketRooms.get(roomCode);
 		if (room === undefined || room.size === 0) {
 			return [];
 		}
-		return [...room.keys()];
+		return room.getUsersFromRoom();
 	};
 };
