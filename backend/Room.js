@@ -6,7 +6,7 @@ class Room {
         this.host = socketObj;
         this.playerSet = new Set();
         this.settings = {
-            
+             
 			numImposters: 1,
 			numTasks: 3,
             numRounds: 3
@@ -16,9 +16,7 @@ class Room {
 
     }
 
-    getPlayerSize = () => {
-        
-    }
+  
 
     getRoomSize = () =>{
         return this.playerSet.size();
@@ -31,7 +29,8 @@ class Room {
     removeUser = (socketId) => {
         room.forEach((socketObj) => {
 			if (socketObj.socketId === socketId) {
-				room.delete(socketObj);
+                room.delete(socketObj);
+                console.log("hello");
 			}
 		});
     }
