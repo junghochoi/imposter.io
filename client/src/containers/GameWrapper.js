@@ -30,7 +30,7 @@ function GameWrapper(props) {
         console.log("lobby doesn't exist")
         content =  <Redirect to='/' />
     } else {
-        content =  <Lobby {...props} playerName={playerName}/>
+        content =  <Lobby {...props} />
     }
     return (
         <ErrorBoundary>

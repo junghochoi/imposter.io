@@ -3,11 +3,11 @@ import styled from 'styled-components';
 function PlayerCard(props) { 
 
     const PlayerCardStyles = styled.div`
-        min-width: 200px;
-        min-height: 200px;
+        width: 60px;
+        height: 60px;
         background-color: #4c4c4c;
         color: white;
-        padding: 30px;
+        padding: 10px;
         margin: 0 5px;
     `;
 
