@@ -7,15 +7,42 @@ import {
 } from "../Events";
 
 import { Container, Heading } from '../styled/Lib';
-import LobbyMenu from '../components/Lobby/LobbyMenu';
+import PlayerContainer from '../components/Lobby/PlayerContainer';
+import SettingsContainer from '../components/Lobby/PlayerContainer';
+import { LobbyMenuContainer } from "../styled/LobbyMenuStyles";
 
 
 export class Lobby extends Component {
 
+	constructor(props) {
+		super(props)
+	
+		this.state = {
+			currPlayer: null,
+			players: [],
+			isHost: false,
+			
+		}
+	}
+	
 
 	componentDidMount() {
-		console.log("lobby mounting");
-		console.log(this.props);
+		socket.emit(GET_PLAYER_LIST, this.props.roomCode, (players)=>{
+			const currPlayer = players.find(socketObj => socketObj.socketId === socket.id);
+			const isHost = currPlayer.host;
+			this.setState({
+				isHost, currPlayer, players
+			})
+		});
+	
+	
+		socket.on(UPDATE_PLAYER_LIST, (players)=>{
+			this.setState((prevState) => ({
+				...prevState,
+				players: players
+			}));
+		});
+	
 	
 	}
 	componentWillUnmount() {
@@ -30,7 +57,13 @@ export class Lobby extends Component {
 		return (
 			<Container>
 				<Heading>Imposter.io</Heading>
-				<LobbyMenu {...this.props}/>
+				<LobbyMenuContainer>
+					
+					<SettingsContainer roomCode={this.props.roomCode} isHost={this.state.isHost}/>
+					<PlayerContainer  roomCode={this.props.roomCode} players={this.state.players}/>
+               
+				</LobbyMenuContainer>
+				{/* <LobbyMenu {...this.props}/> */}
 			</Container>
 		);
 	}

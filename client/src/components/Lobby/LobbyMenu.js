@@ -9,9 +9,6 @@ export class LobbyMenu extends Component {
         return (
             <LobbyMenuContainer>
 
-                <SettingsContainer roomCode={this.props.roomCode}/>
-                <PlayerContainer  roomCode={this.props.roomCode} />
-               
             </LobbyMenuContainer>
         )
     }

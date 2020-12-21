@@ -9,24 +9,6 @@ function PlayerContainer(props) {
     });
 
 
-    socket.emit(GET_PLAYER_LIST, this.props.roomCode, (players)=>{
-        const currPlayer = players.find(socketObj => socketObj.socketId === socket.id);
-        setPlayerState((prevState) => {
-            return {
-                ...prevState,
-                currPlayer: currPlayer,
-                players: players
-            }
-        });
-    });
-
-
-    socket.on(UPDATE_PLAYER_LIST, (players)=>{
-        setPlayerState((prevState) => ({
-            ...prevState,
-            players: players
-        }));
-    });
 
 
     const namesList = playerState.players.map(playerObj => {
