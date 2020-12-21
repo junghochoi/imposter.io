@@ -8,7 +8,7 @@ import {
 
 import { Container, Heading } from '../styled/Lib';
 import PlayerContainer from '../components/Lobby/PlayerContainer';
-import SettingsContainer from '../components/Lobby/PlayerContainer';
+import SettingsContainer from '../components/Lobby/SettingsContainer';
 import { LobbyMenuContainer } from "../styled/LobbyMenuStyles";
 
 
@@ -21,17 +21,18 @@ export class Lobby extends Component {
 			currPlayer: null,
 			players: [],
 			isHost: false,
-			
 		}
 	}
 	
 
 	componentDidMount() {
+
 		socket.emit(GET_PLAYER_LIST, this.props.roomCode, (players)=>{
 			const currPlayer = players.find(socketObj => socketObj.socketId === socket.id);
-			const isHost = currPlayer.host;
 			this.setState({
-				isHost, currPlayer, players
+				currPlayer: currPlayer,
+				players: players,
+				isHost: currPlayer.host,
 			})
 		});
 	
@@ -54,13 +55,15 @@ export class Lobby extends Component {
 
 
 	render() {
+
+		// const isHost = this.state.currPlayer === null ? false : this.state.currPlayer.host;
 		return (
 			<Container>
 				<Heading>Imposter.io</Heading>
 				<LobbyMenuContainer>
 					
 					<SettingsContainer roomCode={this.props.roomCode} isHost={this.state.isHost}/>
-					<PlayerContainer  roomCode={this.props.roomCode} players={this.state.players}/>
+					<PlayerContainer  roomCode={this.props.roomCode} currPlayer={this.state.currPlayer} players={this.state.players}/>
                
 				</LobbyMenuContainer>
 				{/* <LobbyMenu {...this.props}/> */}

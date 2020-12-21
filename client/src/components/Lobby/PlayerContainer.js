@@ -1,23 +1,12 @@
-import React, { useState } from 'react'
-import socket from '../../Socket';
-import { GET_PLAYER_LIST, UPDATE_PLAYER_LIST } from '../../Events';
+import React from 'react'
 function PlayerContainer(props) {
 
-    const [playerState, setPlayerState] = useState({
-        currPlayer: null,
-        players: []
-    });
-
-
-
-
-    const namesList = playerState.players.map(playerObj => {
-        return <li>{playerObj.playerName}</li>
+    const namesList = props.players.map(playerObj => {
+        return <li key={playerObj.socketId}>{playerObj.playerName}</li>
     });
     return (
-
-
         <div>
+            <h5>{props.currPlayer === null ? '' : props.currPlayer.playerName}</h5>
             <ul>{namesList}</ul>
         </div>
     )
