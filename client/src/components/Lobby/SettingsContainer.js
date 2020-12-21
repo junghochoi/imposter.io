@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import socket from '../../Socket';
-import { GET_LOBBY_SETTINGS, UPDATE_LOBBY_SETTINGS } from '../../Events';  
-
+import { GET_LOBBY_SETTINGS, UPDATE_LOBBY_SETTINGS, SUBMIT_LOBBY_SETTINGS } from '../../Events';  
+import { SettingOption } from '../../styled/LobbyMenuStyles';
 export class SettingsContainer extends Component {
 
 
@@ -30,7 +30,12 @@ export class SettingsContainer extends Component {
         this.setState(prevState => ({
             ...prevState,
             [e.target.name]:  e.target.value
-        }));
+        }),() => {
+            const newSettings = this.state
+            console.log(this.props.roomCode);
+            socket.emit(SUBMIT_LOBBY_SETTINGS, this.props.roomCode, newSettings);
+        });
+        
     }
 
     render() {
@@ -38,43 +43,50 @@ export class SettingsContainer extends Component {
             <div>
                 <h2>Room Code: {this.props.roomCode}</h2>
                 
-                <label>Num Imposters</label>
-                <select 
-                    name='numImposters' 
-                    value={this.state.numImposters} 
-                    onChange={e=>this.handleSettingsChange(e)}
-                    disabled={!this.props.isHost}
-                >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
-                <label>Num Tasks</label>
-                <select 
-                    name='numTasks'
-                    value={this.state.numTasks} 
-                    onChange={e=>this.handleSettingsChange(e)}
-                    disabled={!this.props.isHost}
-                >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-                <label>Num Rounds</label>
-                <select 
-                    name='numRounds' 
-                    value={this.state.numRounds} 
-                    onChange={e=>this.handleSettingsChange(e)}
-                    disabled={!this.props.isHost}
-                >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
+                <SettingOption>
+                    <label>Num Imposters</label>
+                    <select 
+                        name='numImposters' 
+                        value={this.state.numImposters} 
+                        onChange={e=>this.handleSettingsChange(e)}
+                        disabled={!this.props.isHost}
+                    >
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </SettingOption>
+                <SettingOption>
+                    <label>Num Tasks</label>
+                    <select 
+                        name='numTasks'
+                        value={this.state.numTasks} 
+                        onChange={e=>this.handleSettingsChange(e)}
+                        disabled={!this.props.isHost}
+                    >
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </SettingOption>
+                <SettingOption>
+                    <label>Num Rounds</label>
+                    <select 
+                        name='numRounds' 
+                        value={this.state.numRounds} 
+                        onChange={e=>this.handleSettingsChange(e)}
+                        disabled={!this.props.isHost}
+                    >
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </SettingOption>
+
             </div>
         )
     }
