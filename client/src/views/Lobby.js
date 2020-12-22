@@ -4,6 +4,7 @@ import {
 	LEAVE_LOBBY, 
 	UPDATE_PLAYER_LIST, 
 	GET_PLAYER_LIST,
+	START_GAME
 } from "../Events";
 
 import { Container, Heading } from '../styled/Lib';
@@ -51,7 +52,9 @@ export class Lobby extends Component {
 		socket.emit(LEAVE_LOBBY, roomCode);
 	}
 
-
+	emitStartGame = () => {
+		socket.emit(START_GAME, this.props.roomCode);
+	}
 
 
 	render() {
@@ -66,7 +69,7 @@ export class Lobby extends Component {
 					<PlayerContainer  roomCode={this.props.roomCode} currPlayer={this.state.currPlayer} players={this.state.players}/>
                
 				</LobbyMenuContainer>
-				{/* <LobbyMenu {...this.props}/> */}
+				<button onClick={this.emitStartGame} disabled={!this.state.isHost}>Start Game</button>
 			</Container>
 		);
 	}

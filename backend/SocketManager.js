@@ -10,7 +10,9 @@ const {
 	IO_DISCONNECTING,
 	SUBMIT_LOBBY_SETTINGS,
 	UPDATE_LOBBY_SETTINGS,
-	GET_LOBBY_SETTINGS
+	GET_LOBBY_SETTINGS,
+	START_GAME,
+
 } = require("../client/src/Events");
 const Room = require('./Room');
 
@@ -75,11 +77,17 @@ module.exports = (socket) => {
 		callback(socketRooms.get(roomCode).getSettings());
 	});
 
+	socket.on(START_GAME, (roomCode)=>{
+		io.to(roomCode).emit(START_GAME);
+	})	
+
 	socket.on("debug", () => {
 		console.log("-------DEBUG-------");
 		console.log(socketRooms);
 		console.log("-------------------");
 	});
+
+
 
 	/*
 		---------------------HELPER FUNCTIONS---------------------

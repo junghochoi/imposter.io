@@ -8,3 +8,14 @@ export const generateRoomCode = () => {
     // return 'abcde';
     return res;
 } 
+
+shuffleAndPick = (arr, size) => {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }        
+    const length = arr.length;
+    const numToDelete = length - size;
+    return arr.splice(0, size, numToDelete);
+  
+}
