@@ -48,8 +48,7 @@ export class Lobby extends Component {
 	
 	}
 	componentWillUnmount() {
-        const roomCode  = this.props.roomCode;
-		socket.emit(LEAVE_LOBBY, roomCode);
+		// socket.emit(LEAVE_LOBBY, this.props.roomCode);
 	}
 
 	emitStartGame = () => {
@@ -67,9 +66,9 @@ export class Lobby extends Component {
 					
 					<SettingsContainer roomCode={this.props.roomCode} isHost={this.state.isHost}/>
 					<PlayerContainer  roomCode={this.props.roomCode} currPlayer={this.state.currPlayer} players={this.state.players}/>
-               
+					<button onClick={this.emitStartGame} disabled={!this.state.isHost}>Start Game</button>
 				</LobbyMenuContainer>
-				<button onClick={this.emitStartGame} disabled={!this.state.isHost}>Start Game</button>
+				
 			</Container>
 		);
 	}

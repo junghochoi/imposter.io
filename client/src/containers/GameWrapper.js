@@ -7,11 +7,11 @@ import ErrorBoundary from '../containers/ErrorBoundary';
 
 import socket from '../Socket';
 
-import { LOBBY_EXISTS, START_GAME } from '../Events';
+import { LOBBY_EXISTS, START_GAME, LEAVE_LOBBY } from '../Events';
 
 
 function GameWrapper(props) {
-    const { playerName, roomCode } = props;
+    const { roomCode } = props;
 
     const [ gameState, setGameState ] = useState({
         lobbyExists: null,
@@ -37,7 +37,10 @@ function GameWrapper(props) {
                 }));
             });
         }
-    }, [gameState]);
+
+
+        return () =>  socket.emit(LEAVE_LOBBY, roomCode);
+    }, []);
 
 
 

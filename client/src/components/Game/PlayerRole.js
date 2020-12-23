@@ -1,13 +1,19 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export class Game extends Component {
-    render() {
-        return (
-            <div>
-                <h1>Game Screen {this.props.playerName}</h1>
-            </div>
-        )
+function PlayerRole(props) {
+
+    console.log("Mounting PlayerRole");
+
+    let content = null;
+
+    let statement = "";
+    if (props.currPlayer !== null) {
+        let role =  props.currPlayer.imposter ? 'IMPOSTER' : 'CREWMATE'
+        statement = props.currPlayer.playerName +  ' , you are a ' + role;
     }
+    return (
+        <h1>{statement}</h1>
+    )
 }
 
-export default Game
+export default PlayerRole
