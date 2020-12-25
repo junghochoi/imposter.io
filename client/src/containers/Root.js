@@ -10,19 +10,21 @@ import socket from "../Socket";
 
 import HomeScreen from "../views/Home";
 import GameWrapper from "./GameWrapper";
+import ErrorBoundary from '../containers/ErrorBoundary';
 
 import Debug from "../dev/Debug";
-import { CREATE_AND_JOIN_LOBBY, JOIN_LOBBY } from "../Events";
 import { generateRoomCode } from "../Utilities";
+import { CREATE_AND_JOIN_LOBBY, JOIN_LOBBY } from "../Events";
+
 
 
 export class Root extends Component {
 
 
 	componentDidMount() {
-		
-		socket.on("SOCKET_DISCONNECT", ()=>{
-			window.location.href = '/';
+		socket.on('disconnect', () =>  {
+			alert('Server disconnected! Check your net connection');
+			window.location = "/"; //page you want to redirect
 		});
 	}
 	/*
@@ -44,6 +46,7 @@ export class Root extends Component {
 	}
 
 	joinLobby = (formData, emitSignal) => {
+		console.log(formData);
 		if (this.preventError(formData)){
 			return <Redirect to='/' />
 		}
@@ -69,8 +72,15 @@ export class Root extends Component {
 
 	render() {
 		return (
+			
 			<Router>
+				
 				<Switch>
+		
+
+
+
+					
 					<Route exact path="/" component={HomeScreen} />
 
 					<Route
@@ -98,12 +108,18 @@ export class Root extends Component {
 							
 							const props  = routeProps.location.state;
 
-							return <GameWrapper {...props}/>
+							return (
+								<GameWrapper {...props}/>
+							
+							)
 						}}	
 					/>
+
 				</Switch>
 				<Debug />
+				
 			</Router>
+		
 		);
 	}
 }

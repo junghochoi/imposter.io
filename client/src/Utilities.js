@@ -16,9 +16,10 @@ export const pickUniqueNumbers = (upperBound, num) => {
         [arr[i], arr[j]] = [arr[j], arr[i]];
     }  
 
-    const length = arr.length;
-    const numToDelete = length - num;
-    return arr.splice(0, num, numToDelete);
+    const numToDelete = arr.length - num;
+    const res = arr.splice(0, num, numToDelete);
+    console.log(res);
+    return res;
 }
 
 

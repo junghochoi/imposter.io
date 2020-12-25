@@ -42,11 +42,7 @@ export class Game extends Component {
                 });
                 const currPlayer = players.find(socketObj => socketObj.socketId === socket.id);
 
-                console.log(currPlayer);
-                console.log(settings);
-                console.log(imposters);
                 console.log(players);
-
 
                 this.setState({
                     currPlayer : currPlayer,
@@ -63,7 +59,7 @@ export class Game extends Component {
 
         let content = null;
         if (this.state.views.playerRole) {
-            console.log(this.state.currPlayer);
+
             content = <PlayerRole currPlayer={this.state.currPlayer}/>
         }
 

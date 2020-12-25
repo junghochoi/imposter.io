@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import socket from "../Socket";
 import { 
-	LEAVE_LOBBY, 
 	UPDATE_PLAYER_LIST, 
 	GET_PLAYER_LIST,
 	START_GAME
@@ -33,7 +32,7 @@ export class Lobby extends Component {
 			this.setState({
 				currPlayer: currPlayer,
 				players: players,
-				isHost: currPlayer.host,
+				isHost: currPlayer === undefined ? false : currPlayer.host
 			})
 		});
 	
@@ -47,9 +46,9 @@ export class Lobby extends Component {
 	
 	
 	}
-	componentWillUnmount() {
-		// socket.emit(LEAVE_LOBBY, this.props.roomCode);
-	}
+	// componentWillUnmount() {
+	// 	socket.emit(LEAVE_LOBBY, this.props.roomCode);
+	// }
 
 	emitStartGame = () => {
 		socket.emit(START_GAME, this.props.roomCode);

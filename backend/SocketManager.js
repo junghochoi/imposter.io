@@ -60,7 +60,6 @@ module.exports = (socket) => {
 	});
 
 	socket.on(LEAVE_LOBBY, (roomCode) => {
-		console.log("LEAVE_LOBBY");
 		socket.leave(roomCode);
 		removeUserFromRoom(roomCode, socket.id);
 		updatePlayerListEmit(roomCode);
@@ -75,7 +74,6 @@ module.exports = (socket) => {
 		io.to(roomCode).emit(UPDATE_LOBBY_SETTINGS, newSettings);
 	});
 	socket.on(GET_LOBBY_SETTINGS, (roomCode, callback) => {
-		// console.log(socketRooms.get(roomCode));
 		callback(socketRooms.get(roomCode).getSettings());
 	});
 
