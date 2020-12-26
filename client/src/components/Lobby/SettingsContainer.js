@@ -4,39 +4,8 @@ import { GET_LOBBY_SETTINGS, UPDATE_LOBBY_SETTINGS, SUBMIT_LOBBY_SETTINGS } from
 import { SettingOption } from '../../styled/LobbyMenuStyles';
 export class SettingsContainer extends Component {
 
-
-    constructor(props) {
-        super(props)
     
-        this.state = {
-            numImposters: 1,
-            numTasks: 3,
-            numRounds: 3
-        }
-    }
-    
-    componentDidMount() {
-        socket.emit(GET_LOBBY_SETTINGS, this.props.roomCode, (settings)=>{
-            this.setState(settings);
-        });
 
-        socket.on(UPDATE_LOBBY_SETTINGS, (settings)=>{
-            this.setState(settings);
-        })
-    }
-
-    
-    handleSettingsChange = (e) => {
-        this.setState(prevState => ({
-            ...prevState,
-            [e.target.name]:  e.target.value
-        }),() => {
-            const newSettings = this.state
-            console.log(this.props.roomCode);
-            socket.emit(SUBMIT_LOBBY_SETTINGS, this.props.roomCode, newSettings);
-        });
-        
-    }
 
     render() {
         return (
@@ -47,8 +16,8 @@ export class SettingsContainer extends Component {
                     <label>Num Imposters</label>
                     <select 
                         name='numImposters' 
-                        value={this.state.numImposters} 
-                        onChange={e=>this.handleSettingsChange(e)}
+                        value={this.props.settings.numImposters} 
+                        onChange={e=>this.props.handleSettingsChange(e)}
                         disabled={!this.props.isHost}
                     >
                         <option value="1">1</option>
@@ -60,8 +29,8 @@ export class SettingsContainer extends Component {
                     <label>Num Tasks</label>
                     <select 
                         name='numTasks'
-                        value={this.state.numTasks} 
-                        onChange={e=>this.handleSettingsChange(e)}
+                        value={this.props.settings.numTasks} 
+                        onChange={e=>this.props.handleSettingsChange(e)}
                         disabled={!this.props.isHost}
                     >
                         <option value="1">1</option>
@@ -75,8 +44,8 @@ export class SettingsContainer extends Component {
                     <label>Num Rounds</label>
                     <select 
                         name='numRounds' 
-                        value={this.state.numRounds} 
-                        onChange={e=>this.handleSettingsChange(e)}
+                        value={this.props.settings.numRounds} 
+                        onChange={e=>this.props.handleSettingsChange(e)}
                         disabled={!this.props.isHost}
                     >
                         <option value="1">1</option>

@@ -5,12 +5,11 @@ class Room {
         this.roomCode = roomCode;
         this.host = socketObj;
         this.playerSet = new Set();
+        this.imposterSet = new Set();
         this.settings = {
-             
 			numImposters: 1,
 			numTasks: 3,
             numRounds: 3
-			
         }
         this.addUser(socketObj);
     }
@@ -42,6 +41,33 @@ class Room {
                 this.playerSet.delete(socketObj);
 			}
 		});
+    }
+
+    pickImposters = (numImposters) => {
+        const indices = this.uniqueNumbers(this.playerSet.size, numImposters);
+        console.log(indices);
+        [...this.playerSet.keys()].forEach((socketObj, i) => {
+    
+            if (indices.includes(i)) {
+          
+                socketObj.imposter = true;
+                this.imposterSet.add(socketObj);
+            } 
+        }); 
+        console.log(this.imposterSet.size);
+        return [...this.imposterSet.keys()];
+    }
+
+    uniqueNumbers = (upperBound, num) => {
+        let arr = [...Array(upperBound).keys()];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }  
+    
+        const numToDelete = arr.length - num;
+        const res = arr.splice(0, num, numToDelete);
+        return res;
     }
 
 } 

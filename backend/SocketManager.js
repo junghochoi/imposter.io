@@ -12,6 +12,7 @@ const {
 	UPDATE_LOBBY_SETTINGS,
 	GET_LOBBY_SETTINGS,
 	START_GAME,
+	PICK_IMPOSTERS,
 
 } = require("../client/src/Events");
 const Room = require('./Room');
@@ -44,6 +45,7 @@ module.exports = (socket) => {
 			socketId: socket.id,
 			playerName: playerName,
 			roomCode: roomCode,
+			imposter: false,
 			host: true,
 		});
 	});
@@ -54,6 +56,7 @@ module.exports = (socket) => {
 				socketId: socket.id,
 				playerName: playerName,
 				roomCode: roomCode,
+				imposter: false,
 				host: false,
 			});
 		}
@@ -77,9 +80,15 @@ module.exports = (socket) => {
 		callback(socketRooms.get(roomCode).getSettings());
 	});
 
-	socket.on(START_GAME, (roomCode)=>{
+	socket.on(START_GAME, (roomCode, numImposters)=>{
+		socketRooms.get(roomCode).pickImposters(numImposters);
 		io.to(roomCode).emit(START_GAME);
-	})	
+	});
+
+	socket.on(PICK_IMPOSTERS, (roomCode, numImposters, callback) => {
+		callback(socketRooms.get(roomCode).pickImposters(numImposters));
+		
+	});
 
 	socket.on("debug", () => {
 		console.log("-------DEBUG-------");
