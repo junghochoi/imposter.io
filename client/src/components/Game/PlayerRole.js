@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 function PlayerRole(props) {
 
-    console.log("Mounting PlayerRole");
-
+    useEffect(() => {
+        setTimeout(props.switchViews, 3000);
+    }, [])
     let content = null;
 
     let statement = "";

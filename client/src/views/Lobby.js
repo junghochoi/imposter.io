@@ -34,7 +34,7 @@ export class Lobby extends Component {
 		const currPlayer = players.find(
 			(socketObj) => socketObj.socketId === socket.id
 		);
-		console.log(players);
+	
 		this.setState({
 			currPlayer: currPlayer,
 			players: players,
@@ -53,7 +53,7 @@ export class Lobby extends Component {
             this.setState(settings);
         });
         socket.on(UPDATE_LOBBY_SETTINGS, (settings)=>{
-		
+	
             this.setState((prevState) => ({
 				...prevState,
 				settings			

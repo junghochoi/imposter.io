@@ -7,6 +7,9 @@ import {
 	PICK_IMPOSTERS,
 	GET_IMPOSTERS,
 } from "../Events";
+
+import DrawingTask from '../components/Game/DrawingTask';
+import NumberTask from '../components/Game/NumbersTask';
 import socket from "../Socket";
 
 export class Game extends Component {
@@ -20,6 +23,8 @@ export class Game extends Component {
 				numRounds: 3,
 			},
 			views: {
+				//  0 - numberTask view
+				//  1 - drawingTask view
 				playerRole: true,
 				voteView: false,
 				numberTaskView: false,
@@ -44,7 +49,30 @@ export class Game extends Component {
 				});
 			});
 		});
-    };
+	};
+	
+	pickRandomTask = () => {
+		const upperBound = 2;
+		const taskNumber =  Math.floor(Math.random() * Math.floor(upperBound));
+		if (taskNumber === 0) {
+			return "numberTaskView";
+		} else {
+			return "drawingTaskView";
+		}
+	}
+
+	playerRoleToRandomTask = () => {
+		const taskName =  this.pickRandomTask();
+	
+		this.setState( prevState => ({
+			...prevState,
+			views: {
+				...prevState.views,
+				playerRole: false,
+				[taskName] : true,
+			}
+		}));
+	}
     
 	componentDidMount() {
 		this.gameInit();
@@ -53,7 +81,11 @@ export class Game extends Component {
 	render() {
 		let content = null;
 		if (this.state.views.playerRole) {
-			content = <PlayerRole currPlayer={this.state.currPlayer} />;
+			content = <PlayerRole currPlayer={this.state.currPlayer} switchViews={this.playerRoleToRandomTask} />;
+		} else if (this.state.views.numberTaskView) {
+			content = <NumberTask />
+		} else if (this.state.views.drawingTaskView) {
+			content = <DrawingTask />
 		}
 
         return content; 
