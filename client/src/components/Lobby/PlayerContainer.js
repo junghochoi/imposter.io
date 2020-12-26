@@ -1,8 +1,10 @@
 import React from 'react'
+import { PlayerCard }  from '../../styled/LobbyMenuStyles'
 function PlayerContainer(props) {
 
     const namesList = props.players.map(playerObj => {
-        return <li key={playerObj.socketId}>{playerObj.playerName}</li>
+        console.log(playerObj);
+        return <PlayerCard key={playerObj.socketId} host={playerObj.host}>{playerObj.playerName}</PlayerCard>
     });
     return (
         <div>

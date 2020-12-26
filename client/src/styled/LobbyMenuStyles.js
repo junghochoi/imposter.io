@@ -13,3 +13,6 @@ export const SettingOption = styled.div`
     color:white;
 `;
 
+export const PlayerCard = styled.li`
+    color: ${props => props.host ? "red" : "black"};
+`;

@@ -39,6 +39,14 @@ class Room {
         this.playerSet.forEach((socketObj) => {
 			if (socketObj.socketId === socketId) {
                 this.playerSet.delete(socketObj);
+                if (this.host === socketObj){
+                    let newHost = this.playerSet.keys().next().value;
+                    this.playerSet.delete(newHost);
+                    newHost.host = true;
+                    this.playerSet.add(newHost);
+                    this.host = newHost;
+
+                }
 			}
 		});
     }

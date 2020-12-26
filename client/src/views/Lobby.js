@@ -30,29 +30,30 @@ export class Lobby extends Component {
 		};
 	}
 
+	setPlayerState = (players) => {
+		const currPlayer = players.find(
+			(socketObj) => socketObj.socketId === socket.id
+		);
+		console.log(players);
+		this.setState({
+			currPlayer: currPlayer,
+			players: players,
+			isHost: currPlayer === undefined ? false : currPlayer.host,
+		});
+	}
 	componentDidMount() {
 		socket.emit(GET_PLAYER_LIST, this.props.roomCode, (players) => {
-			const currPlayer = players.find(
-				(socketObj) => socketObj.socketId === socket.id
-			);
-			this.setState({
-				currPlayer: currPlayer,
-				players: players,
-				isHost: currPlayer === undefined ? false : currPlayer.host,
-			});
+			this.setPlayerState(players);
 		});
 		socket.on(UPDATE_PLAYER_LIST, (players) => {
-			this.setState((prevState) => ({
-				...prevState,
-				players: players,
-			}));
+			this.setPlayerState(players);
 		});
 
 		socket.emit(GET_LOBBY_SETTINGS, this.props.roomCode, (settings)=>{
             this.setState(settings);
         });
         socket.on(UPDATE_LOBBY_SETTINGS, (settings)=>{
-			console.log("UPDATE_LOBBY_SETTINGS");
+		
             this.setState((prevState) => ({
 				...prevState,
 				settings			
@@ -61,7 +62,7 @@ export class Lobby extends Component {
 	}
 	
 	handleSettingsChange = (e) => {
-		console.log("handleSettingsChange");
+
 		this.setState(
 			(prevState) => ({
 				...prevState,
