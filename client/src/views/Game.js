@@ -29,6 +29,7 @@ export class Game extends Component {
 				voteView: false,
 				numberTaskView: false,
 				drawingTaskView: false,
+				questionTaskView: false,
 				finalVoteView: false,
 			},
 			players: [],
@@ -52,10 +53,12 @@ export class Game extends Component {
 	};
 	
 	pickRandomTask = () => {
-		const upperBound = 2;
+		const upperBound = 3;
 		const taskNumber =  Math.floor(Math.random() * Math.floor(upperBound));
 		if (taskNumber === 0) {
 			return "numberTaskView";
+		} else if (taskNumber === 1){
+			return "questionTaskView";
 		} else {
 			return "drawingTaskView";
 		}

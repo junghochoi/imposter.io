@@ -39,7 +39,9 @@ class Room {
         this.playerSet.forEach((socketObj) => {
 			if (socketObj.socketId === socketId) {
                 this.playerSet.delete(socketObj);
-                if (this.host === socketObj){
+
+                // Pick new host if the host left
+                if (this.host === socketObj && this.playerSet.size > 0){
                     let newHost = this.playerSet.keys().next().value;
                     this.playerSet.delete(newHost);
                     newHost.host = true;

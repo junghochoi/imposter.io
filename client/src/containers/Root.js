@@ -10,11 +10,12 @@ import socket from "../Socket";
 
 import HomeScreen from "../views/Home";
 import GameWrapper from "./GameWrapper";
-import ErrorBoundary from '../containers/ErrorBoundary';
+
 
 import Debug from "../dev/Debug";
 import { generateRoomCode } from "../Utilities";
 import { CREATE_AND_JOIN_LOBBY, JOIN_LOBBY } from "../Events";
+import Game from "../views/Game";
 
 
 
@@ -67,6 +68,14 @@ export class Root extends Component {
 		)
 	}
 
+	verifyProps = (props, Component) => {
+		if (props === undefined){
+			return <Redirect to='/' />
+		} else {
+			return <Component {...props}/>
+		}
+	}
+
 
 
 
@@ -74,13 +83,7 @@ export class Root extends Component {
 		return (
 			
 			<Router>
-				
 				<Switch>
-		
-
-
-
-					
 					<Route exact path="/" component={HomeScreen} />
 
 					<Route
@@ -101,18 +104,12 @@ export class Root extends Component {
 							return this.joinLobby(routeProps.location.state, JOIN_LOBBY);
 						}}
 					/>
+
 					<Route
 						exact
 						path="/game/:roomCode"
-						render={(routeProps) => {
-							
-							const props  = routeProps.location.state;
-
-							return (
-								<GameWrapper {...props}/>
-							
-							)
-						}}	
+						render={(routeProps) => this.verifyProps(routeProps.location.state, GameWrapper)}
+	
 					/>
 
 				</Switch>
