@@ -3,7 +3,6 @@ import { PlayerCard }  from '../../styled/LobbyMenuStyles'
 function PlayerContainer(props) {
 
     const namesList = props.players.map(playerObj => {
-        console.log(playerObj);
         return <PlayerCard key={playerObj.socketId} host={playerObj.host}>{playerObj.playerName}</PlayerCard>
     });
     return (

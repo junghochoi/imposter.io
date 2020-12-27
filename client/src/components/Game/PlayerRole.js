@@ -5,7 +5,7 @@ function PlayerRole(props) {
     useEffect(() => {
         setTimeout(props.switchViews, 3000);
     }, [])
-    let content = null;
+  
 
     let statement = "";
     if (props.currPlayer !== null) {

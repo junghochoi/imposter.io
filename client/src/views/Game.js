@@ -4,8 +4,7 @@ import PlayerRole from "../components/Game/PlayerRole";
 import {
 	GET_PLAYER_LIST,
 	GET_LOBBY_SETTINGS,
-	PICK_IMPOSTERS,
-	GET_IMPOSTERS,
+
 } from "../Events";
 
 import DrawingTask from '../components/Game/DrawingTask';

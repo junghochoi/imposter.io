@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import socket from "../Socket";
 import {
-	UPDATE_PLAYER_LIST,
-	GET_PLAYER_LIST,
+
 	START_GAME,
-	SUBMIT_LOBBY_SETTINGS,
-	GET_LOBBY_SETTINGS,
-	UPDATE_LOBBY_SETTINGS
+
 } from "../Events";
 
 import { Container, Heading } from "../styled/Lib";
@@ -15,97 +12,35 @@ import SettingsContainer from "../components/Lobby/SettingsContainer";
 import { LobbyMenuContainer } from "../styled/LobbyMenuStyles";
 
 export class Lobby extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			currPlayer: null,
-			players: [],
-			isHost: false,
-			settings: {
-				numImposters: 1,
-				numTasks: 3,
-				numRounds: 3,
-			},
-		};
-	}
-
-	setPlayerState = (players) => {
-		const currPlayer = players.find(
-			(socketObj) => socketObj.socketId === socket.id
-		);
 	
-		this.setState({
-			currPlayer: currPlayer,
-			players: players,
-			isHost: currPlayer === undefined ? false : currPlayer.host,
-		});
-	}
-	componentDidMount() {
-		socket.emit(GET_PLAYER_LIST, this.props.roomCode, (players) => {
-			this.setPlayerState(players);
-		});
-		socket.on(UPDATE_PLAYER_LIST, (players) => {
-			this.setPlayerState(players);
-		});
 
-		socket.emit(GET_LOBBY_SETTINGS, this.props.roomCode, (settings)=>{
-            this.setState(settings);
-        });
-        socket.on(UPDATE_LOBBY_SETTINGS, (settings)=>{
-	
-            this.setState((prevState) => ({
-				...prevState,
-				settings			
-			}));
-        })
-	}
-	
-	handleSettingsChange = (e) => {
-
-		this.setState(
-			(prevState) => ({
-				...prevState,
-				settings: {
-					...prevState.settings,
-					[e.target.name]: e.target.value,
-				},
-			}),
-			() => {
-			
-				socket.emit(
-					SUBMIT_LOBBY_SETTINGS,
-					this.props.roomCode,
-					this.state.settings
-				);
-			}
-		);
-	};
 
 	emitStartGame = () => {
-		socket.emit(START_GAME, this.props.roomCode, this.state.settings.numImposters);
+		socket.emit(START_GAME, this.props.roomCode, this.props.gameState.settings.numImposters);
 	};
 
 	render() {
-		// const isHost = this.state.currPlayer === null ? false : this.state.currPlayer.host;
+
+		const { currPlayer, players, settings } = this.props.gameState;
+		const isHost = currPlayer === null ? false : currPlayer.host;
 		return (
 			<Container>
 				<Heading>Imposter.io</Heading>
 				<LobbyMenuContainer>
 					<SettingsContainer
 						roomCode={this.props.roomCode}
-						isHost={this.state.isHost}
-						settings={this.state.settings}
-						handleSettingsChange={this.handleSettingsChange}
+						isHost={isHost}
+						settings={settings}
+						handleSettingsChange={this.props.handleSettingsChange}
 					/>
 					<PlayerContainer
 						roomCode={this.props.roomCode}
-						currPlayer={this.state.currPlayer}
-						players={this.state.players}
+						currPlayer={currPlayer}
+						players={players}
 					/>
 					<button
 						onClick={this.emitStartGame}
-						disabled={!this.state.isHost}
+						disabled={!isHost}
 					>
 						Start Game
 					</button>
