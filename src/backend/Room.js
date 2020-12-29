@@ -1,4 +1,4 @@
-
+const { NUMBERS_TASK, QUESTION_TASK, DRAWING_TASK} = require('../Views');
 
 class Room {
     constructor(roomCode, socketObj) {
@@ -11,6 +11,7 @@ class Room {
 			numTasks: 3,
             numRounds: 3
         }
+        this.tasks = ["numberTaskView", "drawingTaskView", "questionTaskView"],
         this.addUser(socketObj);
     }
 
@@ -52,9 +53,12 @@ class Room {
 		});
     }
 
-    pickImposters = (numImposters) => {
+    
+    generateImposters = (numImposters) => {
+        // Reset Imposters
+        this.playerSet.forEach(socketObj => socketObj.imposter = false);
+
         const indices = this.uniqueNumbers(this.playerSet.size, numImposters);
-        console.log(indices);
         [...this.playerSet.keys()].forEach((socketObj, i) => {
     
             if (indices.includes(i)) {
@@ -63,8 +67,19 @@ class Room {
                 this.imposterSet.add(socketObj);
             } 
         }); 
-        console.log(this.imposterSet.size);
-        return [...this.imposterSet.keys()];
+
+        return this.getUsersFromRoom();
+    }
+
+    generateTasks = () => {
+
+        let tasks = []
+        for(let i = 0; i < this.settings.numTasks; i++){
+            // tasks.push(NUMBERS_TASK);
+            tasks.push(this.pickRandomTask());
+        }
+        this.tasks = tasks;
+        return tasks;
     }
 
     uniqueNumbers = (upperBound, num) => {
@@ -78,6 +93,17 @@ class Room {
         const res = arr.splice(0, num, numToDelete);
         return res;
     }
-
+	
+	pickRandomTask = () => {
+		const upperBound = 3;
+		const taskNumber =  Math.floor(Math.random() * Math.floor(upperBound));
+		if (taskNumber === 0) {
+			return NUMBERS_TASK
+		} else if (taskNumber === 1){
+			return QUESTION_TASK
+		} else {
+			return DRAWING_TASK
+		}
+	}
 } 
 module.exports = Room;

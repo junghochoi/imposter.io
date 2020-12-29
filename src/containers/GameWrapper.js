@@ -15,6 +15,7 @@ import { LOBBY_EXISTS,
     GET_LOBBY_SETTINGS,
     UPDATE_LOBBY_SETTINGS,
     SUBMIT_LOBBY_SETTINGS,
+    REVEAL_ROLE,
 } from '../Events';
 
 
@@ -32,7 +33,8 @@ export class GameWrapper extends Component {
                      numImposters: 1,
                      numTasks: 3,
                      numRounds: 3
-                 }
+                 },
+                 tasks: []
 
              }
         }
@@ -109,12 +111,24 @@ export class GameWrapper extends Component {
  
     componentDidMount() {
         this.lobbySettingsInit();
-        socket.on(START_GAME, ()=> {
+        socket.on(START_GAME, (players, settings, tasks)=> {
+            const currPlayer = players.find(
+                (socketObj) => socketObj.socketId === socket.id
+            );
             this.setState((prevState) => ({
                 ...prevState,
                 gameStarted: true,
+                gameState: {
+                    ...prevState.gameState,
+                    currPlayer: currPlayer, 
+                    settings: settings,
+                    players: players,
+                    tasks: tasks
+                }
             }));
-        })
+        });
+
+        
     }
 
     componentWillUnmount() {
@@ -133,7 +147,7 @@ export class GameWrapper extends Component {
         if (this.state.lobbyExists === null) {
             content =  <Loading />
         } else if (this.state.gameStarted === true){
-            content = <Game {...this.props}/>
+            content = <Game {...this.props} gameState={this.state.gameState}/>
         } else if (this.state.lobbyExists === false) {
             content =  <Redirect to='/' />
         } else if (this.state.lobbyExists === true){
@@ -149,60 +163,4 @@ export class GameWrapper extends Component {
 }
 
 export default GameWrapper
-
-
-// function GameWrapper(props) {
-//     const { roomCode } = props;
-
-//     const [ gameState, setGameState ] = useState({
-//         lobbyExists: null,
-//         gameStarted: false,
-
-//     });
-
-//     useEffect(() => {
-
-//         socket.on(START_GAME, ()=> {
-//             setGameState((prevState) => ({
-//                 ...prevState,
-//                 gameStarted: true,
-//             }));
-//         })
-
-//         if (gameState.lobbyExists === null) {
-//             socket.emit(LOBBY_EXISTS, roomCode, (exists)=>{
-//                 setGameState((prevState) => ({
-//                     ...prevState,
-//                     lobbyExists: exists
-//                 }));
-//             });
-//         }
-
-
-//         return () =>  socket.emit(LEAVE_LOBBY, roomCode);
-//     }, []);
-
-
-
-
-    // let content = null;
-    // if (gameState.lobbyExists === null) {
-    //     content =  <Loading />
-    // } else if (gameState.gameStarted === true){
-    //     content = <Game {...props}/>
-    // }else if (gameState.lobbyExists === false) {
-    //     content =  <Redirect to='/' />
-    // } else if (gameState.lobbyExists === true){
-    //     content =  <Lobby {...props} />
-    // }
-    // return (
-    //     <ErrorBoundary>
-    //         {content}
-    //     </ErrorBoundary>
-        
-        
-
-    // );
-
-// }
 

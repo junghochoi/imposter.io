@@ -16,7 +16,7 @@ export class Lobby extends Component {
 
 
 	emitStartGame = () => {
-		socket.emit(START_GAME, this.props.roomCode, this.props.gameState.settings.numImposters);
+		socket.emit(START_GAME, this.props.roomCode);
 	};
 
 	render() {

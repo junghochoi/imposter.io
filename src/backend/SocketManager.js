@@ -12,9 +12,9 @@ const {
 	UPDATE_LOBBY_SETTINGS,
 	GET_LOBBY_SETTINGS,
 	START_GAME,
-	PICK_IMPOSTERS,
+	REVEAL_ROLE,
 
-} = require("../client/src/Events");
+} = require('../Events');
 const Room = require('./Room');
 
 let socketRooms = new Map();
@@ -80,15 +80,10 @@ module.exports = (socket) => {
 		callback(socketRooms.get(roomCode).getSettings());
 	});
 
-	socket.on(START_GAME, (roomCode, numImposters)=>{
-		socketRooms.get(roomCode).pickImposters(numImposters);
-		io.to(roomCode).emit(START_GAME);
+	socket.on(START_GAME, (roomCode)=>{
+		runGame(roomCode);
 	});
 
-	socket.on(PICK_IMPOSTERS, (roomCode, numImposters, callback) => {
-		callback(socketRooms.get(roomCode).pickImposters(numImposters));
-		
-	});
 
 	socket.on("debug", () => {
 		console.log("-------DEBUG-------");
@@ -132,4 +127,15 @@ module.exports = (socket) => {
 		}
 		return room.getUsersFromRoom();
 	};
+
+
+	const runGame =  (roomCode) => {
+
+		let room = socketRooms.get(roomCode);
+		const settings = room.getSettings();
+		let players = room.generateImposters(settings.numImposters);
+		const tasks = room.generateTasks();
+		console.log(tasks);
+		io.to(roomCode).emit(START_GAME, players, settings, tasks);
+	}
 };
