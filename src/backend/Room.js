@@ -72,14 +72,14 @@ class Room {
     }
 
     generateTasks = () => {
-
-        let tasks = []
-        for(let i = 0; i < this.settings.numTasks; i++){
-            // tasks.push(NUMBERS_TASK);
-            tasks.push(this.pickRandomTask());
-        }
-        this.tasks = tasks;
-        return tasks;
+        return [NUMBERS_TASK, DRAWING_TASK, QUESTION_TASK];
+        // let tasks = []
+        // for(let i = 0; i < this.settings.numTasks; i++){
+        //     // tasks.push(NUMBERS_TASK);
+        //     tasks.push(this.pickRandomTask());
+        // }
+        // this.tasks = tasks;
+        // return tasks;
     }
 
     uniqueNumbers = (upperBound, num) => {

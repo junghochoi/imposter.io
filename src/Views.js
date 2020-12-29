@@ -3,4 +3,5 @@ module.exports = {
     NUMBERS_TASK: "numberTaskView",
     DRAWING_TASK: "drawingTaskView",
     QUESTION_TASK: "questionTaskView",
+    VOTE_VIEW: 'voteView'
 }
