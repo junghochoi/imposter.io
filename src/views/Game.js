@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import PlayerRole from "../components/Game/PlayerRole";
-
-
-
 import DrawingTask from '../components/Game/DrawingTask';
 import NumberTask from '../components/Game/NumbersTask';
 import QuestionTask from "../components/Game/QuestionTask";
+import Vote from '../components/Game/Vote';
 import socket from "../Socket";
+
+import {
+	SWITCH_SCREEN
+} from '../Events';
 
 
 export class Game extends Component {
@@ -14,7 +16,6 @@ export class Game extends Component {
 		super(props);
 
 		this.state = {
-			taskInd: 0,
 			views: {
 
 				playerRoleView: true,
@@ -32,40 +33,42 @@ export class Game extends Component {
 	}
 
 
-	switchView = (lastView) => {
 
-		console.log("switchView");
-		const nextView = this.props.gameState.tasks[this.state.taskInd];
-		this.setState(prevState => ({
-			...prevState,
-			taskInd: prevState.taskInd + 1,
-			views: {
-				...prevState,
-				[nextView] : true,
-				[lastView] : false
-			}
-		}));
-
-	}
 
 	componentDidMount() {
+		socket.on(SWITCH_SCREEN, (nextView) => {
+			this.setState(prevState =>{
+				let views = Object.assign({}, prevState.views);
+				Object.keys(views).forEach(viewName => views[viewName] = false);
+				views[nextView] = true;
 
+
+				console.log(views);
+				return { 
+					...prevState, 
+					views: views
+				};
+			});
+			
+						 
+		});
 	}
     
 
 
 	render() {
-		console.log(this.state.views);
-		console.log(this.props.gameState.tasks);
+
 		let content = null;
 		if (this.state.views.playerRoleView) {
-			content = <PlayerRole gameState={this.props.gameState} switchView={this.switchView} />;
+			content = <PlayerRole gameState={this.props.gameState} />;
 		} else if (this.state.views.numberTaskView) {
-			content = <NumberTask gameState={this.props.gameState} switchView={this.switchView}/>
+			content = <NumberTask gameState={this.props.gameState} />
 		} else if (this.state.views.drawingTaskView) {
-			content = <DrawingTask gameState={this.props.gameState} switchView={this.switchView}/>
+			content = <DrawingTask gameState={this.props.gameState} />
+		} else if (this.state.views.questionTaskView) {
+			content = <QuestionTask gameState={this.props.gameState} />
 		} else {
-			content = <QuestionTask gameState={this.props.gameState} switchView={this.switchView}/>
+			content = <Vote />
 		}
 
         return content; 

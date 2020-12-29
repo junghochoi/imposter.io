@@ -12,9 +12,18 @@ const {
 	UPDATE_LOBBY_SETTINGS,
 	GET_LOBBY_SETTINGS,
 	START_GAME,
-	REVEAL_ROLE,
+	SWITCH_SCREEN,
+	END_GAME
 
 } = require('../Events');
+
+const  {
+	PLAYER_ROLE,
+	QUESTION_TASK,
+	VOTE_VIEW,
+	DRAWING_TASK,
+	NUMBERS_TASK,
+} = require('../Views');
 const Room = require('./Room');
 
 let socketRooms = new Map();
@@ -129,13 +138,59 @@ module.exports = (socket) => {
 	};
 
 
-	const runGame =  (roomCode) => {
+	const runGame = async (roomCode) => {
 
-		let room = socketRooms.get(roomCode);
+		const createTimeout = (func, delay /* in ms */) => {
+			console.log('createTimeout');
+			return () => setTimeout(func, delay);
+		}
+
+		const delay = ms => new Promise(res => setTimeout(res, ms));
+
+		const room = socketRooms.get(roomCode);
 		const settings = room.getSettings();
-		let players = room.generateImposters(settings.numImposters);
+		const players = room.generateImposters(settings.numImposters);
+		const roomSocket = io.to(roomCode);
 		const tasks = room.generateTasks();
-		console.log(tasks);
-		io.to(roomCode).emit(START_GAME, players, settings, tasks);
+
+		
+		
+		let stepZero, stepOne, stepTwo, stepThree;
+
+		roomSocket.emit(START_GAME, players, settings, tasks);
+		console.log("START_GAME");
+		await delay(2000);
+		roomSocket.emit(SWITCH_SCREEN, QUESTION_TASK);
+		console.log("QUESTION_TASK");
+		await delay(2000);
+		roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
+		console.log("VOTE_VIEW");
+		await delay(2000);
+		roomSocket.emit(SWITCH_SCREEN, DRAWING_TASK);
+		console.log("DRAWING_TASK");
+		await delay(2000);
+		roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
+		console.log("VOTE_VIEW");
+		await delay(2000);
+		roomSocket.emit(SWITCH_SCREEN, NUMBERS_TASK);
+		console.log('NUMBERS_TASK');
+		await delay(2000);
+		roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
+		console.log("VOTE_VIEW");
+		await delay(2000);
+		roomSocket.emit(END_GAME);
+
+
+
+
+		// setTimeout(stepOne, 5000)
+		// stepOne = createTimeout(() => {
+		// 	console.log("step one finished");
+		// 	roomSocket.emit(SWITCH_SCREEN, QUESTION_TASK);
+		// }, 5000);
+
+		
+
+		// stepOne();
 	}
 };

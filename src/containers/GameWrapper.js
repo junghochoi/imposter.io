@@ -15,7 +15,7 @@ import { LOBBY_EXISTS,
     GET_LOBBY_SETTINGS,
     UPDATE_LOBBY_SETTINGS,
     SUBMIT_LOBBY_SETTINGS,
-    REVEAL_ROLE,
+    END_GAME,
 } from '../Events';
 
 
@@ -126,6 +126,13 @@ export class GameWrapper extends Component {
                     tasks: tasks
                 }
             }));
+        });
+
+        socket.on(END_GAME, ()=> {
+            this.setState(prevState => ({
+                ...prevState,
+                gameStarted: false,
+            }))
         });
 
         
