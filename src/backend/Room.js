@@ -98,7 +98,7 @@ class Room {
 		}
     }
     
-    recordAnswer = (responseObj) => {
+    recordTaskAnswer = (responseObj) => {
         this.prevAnswers.add(responseObj);
     }
     clearAnswers = () => {
@@ -109,6 +109,10 @@ class Room {
     }
     getAnswerSize = () => {
         return this.prevAnswers.size;
+    }
+    recordVoteAnswer = (playerSocketId, votesArr) => {
+        console.log(playerSocketId);
+        console.log(votesArr);
     }
 } 
 module.exports = Room;

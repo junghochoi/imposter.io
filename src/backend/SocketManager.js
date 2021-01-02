@@ -15,7 +15,8 @@ const {
 	SWITCH_SCREEN,
 	END_GAME,
 	SEND_ANSWER,
-	SHOW_ANSWERS
+	SHOW_ANSWERS,
+	SEND_VOTES
 
 } = require('../Events');
 
@@ -108,14 +109,18 @@ module.exports = (socket) => {
 	socket.on(SEND_ANSWER, (roomCode, responseObj) => {
 		console.log(socket.id + " sent an answer");
 		const room = socketRooms.get(roomCode);
-		room.recordAnswer(responseObj);
+		room.recordTaskAnswer(responseObj);
 		// console.log(room.getAnswerSize(), + ' ' + room.getRoomSize());
 		if (room.getAnswerSize() >= room.getRoomSize()){
 			const res = room.getAnswers();
 			io.to(roomCode).emit(SHOW_ANSWERS, res);
 		}
 	});
-
+	
+	socket.on(SEND_VOTES, (roomCode, playerSocketId, votes) => {
+		const room = socketRooms.get(roomCode);
+		room.recordVoteAnswer(playerSocketId, votes);
+	});
 	socket.on("debug", (callback) => {
 		console.log("-------DEBUG-------");
 		
@@ -145,22 +150,16 @@ module.exports = (socket) => {
 		const players = room.generateImposters(settings.numImposters);
 		const roomSocket = io.to(roomCode);
 
-
-
-
 		roomSocket.emit(START_GAME, players, settings);
 		console.log("START_GAME");
 		await delay(3000);
 		
-		
-
 		roomSocket.emit(SWITCH_SCREEN, NUMBERS_TASK, pickRandomQuestion(NumberPrompt));
 		console.log('NUMBERS_TASK');
-		await delay(10000);
+		await delay(5000);
 
-		
 		roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
-		await delay(10000);
+		await delay(5000);
 		room.clearAnswers();
 
 		// roomSocket.emit(SWITCH_SCREEN, QUESTION_TASK);

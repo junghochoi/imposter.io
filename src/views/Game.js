@@ -71,7 +71,7 @@ export class Game extends Component {
 		} else if (this.state.views.questionTaskView) {
 			content = <QuestionTask {...this.props}  currQuestion={this.state.currQuestion}/>
 		} else {
-			content = <Vote currQuestion={this.state.currQuestion}/>
+			content = <Vote {...this.props} currQuestion={this.state.currQuestion}/>
 		}
 
         return content; 

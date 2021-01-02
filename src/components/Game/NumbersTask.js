@@ -13,13 +13,9 @@ function NumbersTask(props) {
 
     useEffect(() => {
         answerRef.current = answer;
-        console.log(answerRef.current);
-        
     }, [answer]);
     
     useEffect(() => {
-        
-        
         return (() => {
             let responseObj = Object.assign({answer: answerRef.current}, props.gameState.currPlayer);
             socket.emit(SEND_ANSWER, props.roomCode, responseObj);
