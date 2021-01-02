@@ -6,15 +6,15 @@ import {
 function PlayerRole(props) {
 
 
-    useEffect(() => {
-        console.log("playerRole useEffect")
-        setTimeout(props.switchView, 2000, PLAYER_ROLE);
+    // useEffect(() => {
+    //     console.log("playerRole useEffect")
+    //     setTimeout(props.switchView, 2000, PLAYER_ROLE);
         
-    }, []);
+    // }, []);
 
     let statement = "";
     if (props.gameState.currPlayer !== null) {
-        console.log(props.gameState.currPlayer);
+        
         let role =  props.gameState.currPlayer.imposter ? 'IMPOSTER' : 'CREWMATE'
         statement = props.gameState.currPlayer.playerName +  ' , you are a ' + role;
     }

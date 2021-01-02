@@ -3,7 +3,10 @@ import socket from '../Socket'
 function Debug() {
 
     const debug = () => {
-      socket.emit('debug');
+      socket.emit('debug',() => {
+        setTimeout(console.log, 1000, "callback");
+      });
+      console.log("not call back");
     }
 
 

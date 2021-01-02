@@ -1,0 +1,32 @@
+{
+	"QuestionPrompt": [
+        {
+            "original" : "What was the best part of highschool?",
+            "modified" : "What was the best part of elementary schooL?"
+        }, {
+            "original" : "My favorite vegetable is ....",
+            "modified" : "My favorite fruit is ..."
+        }, {
+            "original": "My favorite sport is...",
+            "modified": "My favorite outside activity is..."
+        }
+        
+       
+    ],
+	"DrawingPrompt": [
+		{ "original": "chair", "modified": "bench" },
+		{ "original": "sunrise", "modified": "sunset" },
+		{ "original": "evergreen tree", "modified": "christmas tree" },
+		{ "original": "laptop", "modified": "computer" },
+		{ "original": "football", "modified": "rugby" },
+		{ "original": "dinner", "modified": "Thanksgiving Dinner" },
+		{ "original": "sunrise", "modified": "sunset" }
+	],
+
+	"NumberPrompt": [
+        "I am a coffee drinker",
+        "Dogs are better than cats",
+        "I like to play video games",
+        "I am capable of eating alot"
+    ]
+}

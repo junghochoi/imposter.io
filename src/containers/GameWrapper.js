@@ -34,7 +34,6 @@ export class GameWrapper extends Component {
                      numTasks: 3,
                      numRounds: 3
                  },
-                 tasks: []
 
              }
         }
@@ -111,7 +110,7 @@ export class GameWrapper extends Component {
  
     componentDidMount() {
         this.lobbySettingsInit();
-        socket.on(START_GAME, (players, settings, tasks)=> {
+        socket.on(START_GAME, (players, settings)=> {
             const currPlayer = players.find(
                 (socketObj) => socketObj.socketId === socket.id
             );
@@ -123,7 +122,6 @@ export class GameWrapper extends Component {
                     currPlayer: currPlayer, 
                     settings: settings,
                     players: players,
-                    tasks: tasks
                 }
             }));
         });
@@ -139,6 +137,8 @@ export class GameWrapper extends Component {
     }
 
     componentWillUnmount() {
+        socket.off(START_GAME);
+        socket.off(END_GAME);
         socket.emit(LEAVE_LOBBY, this.props.roomCode);
     }
     

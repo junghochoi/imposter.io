@@ -13,7 +13,9 @@ const {
 	GET_LOBBY_SETTINGS,
 	START_GAME,
 	SWITCH_SCREEN,
-	END_GAME
+	END_GAME,
+	SEND_ANSWER,
+	SHOW_ANSWERS
 
 } = require('../Events');
 
@@ -24,6 +26,14 @@ const  {
 	DRAWING_TASK,
 	NUMBERS_TASK,
 } = require('../Views');
+
+const {
+	QuestionPrompt,
+	DrawingPrompt,
+	NumberPrompt
+
+} = require('../Questions.json');
+
 const Room = require('./Room');
 
 let socketRooms = new Map();
@@ -94,9 +104,23 @@ module.exports = (socket) => {
 	});
 
 
-	socket.on("debug", () => {
+
+	socket.on(SEND_ANSWER, (roomCode, responseObj) => {
+		console.log(socket.id + " sent an answer");
+		const room = socketRooms.get(roomCode);
+		room.recordAnswer(responseObj);
+		// console.log(room.getAnswerSize(), + ' ' + room.getRoomSize());
+		if (room.getAnswerSize() >= room.getRoomSize()){
+			const res = room.getAnswers();
+			io.to(roomCode).emit(SHOW_ANSWERS, res);
+		}
+	});
+
+	socket.on("debug", (callback) => {
 		console.log("-------DEBUG-------");
+		
 		console.log(socketRooms);
+		callback();
 		console.log("-------------------");
 	});
 
@@ -105,6 +129,76 @@ module.exports = (socket) => {
 	/*
 		---------------------HELPER FUNCTIONS---------------------
 	*/
+
+
+
+		//--- Pick Random Question
+	const pickRandomQuestion = (questionList) => {
+		return questionList[Math.floor(Math.random() * questionList.length)]
+	}
+	const runGame = async (roomCode) => {
+			
+		const delay = ms => new Promise(res => setTimeout(res, ms));
+
+		const room = socketRooms.get(roomCode);
+		const settings = room.getSettings();
+		const players = room.generateImposters(settings.numImposters);
+		const roomSocket = io.to(roomCode);
+
+
+
+
+		roomSocket.emit(START_GAME, players, settings);
+		console.log("START_GAME");
+		await delay(3000);
+		
+		
+
+		roomSocket.emit(SWITCH_SCREEN, NUMBERS_TASK, pickRandomQuestion(NumberPrompt));
+		console.log('NUMBERS_TASK');
+		await delay(10000);
+
+		
+		roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
+		await delay(10000);
+		room.clearAnswers();
+
+		// roomSocket.emit(SWITCH_SCREEN, QUESTION_TASK);
+		// console.log("QUESTION_TASK");
+		// await delay(2000);
+
+
+	
+
+
+		// roomSocket.emit(SWITCH_SCREEN, DRAWING_TASK);
+		// console.log("DRAWING_TASK");
+		// await delay(2000);
+
+
+		// roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
+		// console.log("VOTE_VIEW");
+		// await delay(2000);
+	
+		// roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
+		// console.log("VOTE_VIEW");
+		// await delay(2000);
+
+		roomSocket.emit(END_GAME);
+
+
+
+
+		// setTimeout(stepOne, 5000)
+		// stepOne = createTimeout(() => {
+		// 	console.log("step one finished");
+		// 	roomSocket.emit(SWITCH_SCREEN, QUESTION_TASK);
+		// }, 5000);
+
+		
+
+		// stepOne();
+	}
 
 	const addUserToRoom = (roomCode, socketObj) => {
 		socket.join(roomCode);
@@ -138,59 +232,6 @@ module.exports = (socket) => {
 	};
 
 
-	const runGame = async (roomCode) => {
-
-		const createTimeout = (func, delay /* in ms */) => {
-			console.log('createTimeout');
-			return () => setTimeout(func, delay);
-		}
-
-		const delay = ms => new Promise(res => setTimeout(res, ms));
-
-		const room = socketRooms.get(roomCode);
-		const settings = room.getSettings();
-		const players = room.generateImposters(settings.numImposters);
-		const roomSocket = io.to(roomCode);
-		const tasks = room.generateTasks();
-
-		
-		
-		let stepZero, stepOne, stepTwo, stepThree;
-
-		roomSocket.emit(START_GAME, players, settings, tasks);
-		console.log("START_GAME");
-		await delay(2000);
-		roomSocket.emit(SWITCH_SCREEN, QUESTION_TASK);
-		console.log("QUESTION_TASK");
-		await delay(2000);
-		roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
-		console.log("VOTE_VIEW");
-		await delay(2000);
-		roomSocket.emit(SWITCH_SCREEN, DRAWING_TASK);
-		console.log("DRAWING_TASK");
-		await delay(2000);
-		roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
-		console.log("VOTE_VIEW");
-		await delay(2000);
-		roomSocket.emit(SWITCH_SCREEN, NUMBERS_TASK);
-		console.log('NUMBERS_TASK');
-		await delay(2000);
-		roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
-		console.log("VOTE_VIEW");
-		await delay(2000);
-		roomSocket.emit(END_GAME);
 
 
-
-
-		// setTimeout(stepOne, 5000)
-		// stepOne = createTimeout(() => {
-		// 	console.log("step one finished");
-		// 	roomSocket.emit(SWITCH_SCREEN, QUESTION_TASK);
-		// }, 5000);
-
-		
-
-		// stepOne();
-	}
 };

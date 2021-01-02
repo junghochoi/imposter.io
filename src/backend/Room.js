@@ -11,7 +11,9 @@ class Room {
 			numTasks: 3,
             numRounds: 3
         }
-        this.tasks = ["numberTaskView", "drawingTaskView", "questionTaskView"],
+
+        this.prevAnswers = new Set();
+    
         this.addUser(socketObj);
     }
 
@@ -71,16 +73,6 @@ class Room {
         return this.getUsersFromRoom();
     }
 
-    generateTasks = () => {
-        return [NUMBERS_TASK, DRAWING_TASK, QUESTION_TASK];
-        // let tasks = []
-        // for(let i = 0; i < this.settings.numTasks; i++){
-        //     // tasks.push(NUMBERS_TASK);
-        //     tasks.push(this.pickRandomTask());
-        // }
-        // this.tasks = tasks;
-        // return tasks;
-    }
 
     uniqueNumbers = (upperBound, num) => {
         let arr = [...Array(upperBound).keys()];
@@ -101,9 +93,22 @@ class Room {
 			return NUMBERS_TASK
 		} else if (taskNumber === 1){
 			return QUESTION_TASK
-		} else {
+		} else {    
 			return DRAWING_TASK
 		}
-	}
+    }
+    
+    recordAnswer = (responseObj) => {
+        this.prevAnswers.add(responseObj);
+    }
+    clearAnswers = () => {
+        this.prevAnswers.clear();
+    }
+    getAnswers = () => {
+        return [...this.prevAnswers.keys()];
+    }
+    getAnswerSize = () => {
+        return this.prevAnswers.size;
+    }
 } 
 module.exports = Room;
