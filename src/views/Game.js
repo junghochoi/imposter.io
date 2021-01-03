@@ -3,6 +3,7 @@ import PlayerRole from "../components/Game/PlayerRole";
 import DrawingTask from '../components/Game/DrawingTask';
 import NumberTask from '../components/Game/NumbersTask';
 import QuestionTask from "../components/Game/QuestionTask";
+import EndGame from '../components/Game/EndGame';
 import Vote from '../components/Game/Vote';
 import socket from "../Socket";
 
@@ -32,6 +33,8 @@ export class Game extends Component {
 
 				voteView: false,
 				finalVoteView: false,
+
+				endGameView: false,
 			},
 		};
 	}
@@ -70,8 +73,10 @@ export class Game extends Component {
 			content = <DrawingTask {...this.props}  currQuestion={this.state.currQuestion}/>
 		} else if (this.state.views.questionTaskView) {
 			content = <QuestionTask {...this.props}  currQuestion={this.state.currQuestion}/>
-		} else {
+		} else if (this.state.views.voteView){
 			content = <Vote {...this.props} currQuestion={this.state.currQuestion}/>
+		} else {
+			content = <EndGame {...this.props} />
 		}
 
         return content; 

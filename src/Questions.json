@@ -1,5 +1,5 @@
 {
-	"QuestionPrompt": [
+	"QuestionPrompts": [
         {
             "original" : "What was the best part of highschool?",
             "modified" : "What was the best part of elementary schooL?"
@@ -13,7 +13,7 @@
         
        
     ],
-	"DrawingPrompt": [
+	"DrawingPrompts": [
 		{ "original": "chair", "modified": "bench" },
 		{ "original": "sunrise", "modified": "sunset" },
 		{ "original": "evergreen tree", "modified": "christmas tree" },
@@ -23,7 +23,7 @@
 		{ "original": "sunrise", "modified": "sunset" }
 	],
 
-	"NumberPrompt": [
+	"NumberPrompts": [
         "I am a coffee drinker",
         "Dogs are better than cats",
         "I like to play video games",

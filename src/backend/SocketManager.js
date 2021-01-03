@@ -16,6 +16,7 @@ const {
 	END_GAME,
 	SEND_ANSWER,
 	SHOW_ANSWERS,
+	SHOW_RESULTS,
 	SEND_VOTES
 
 } = require('../Events');
@@ -26,12 +27,13 @@ const  {
 	VOTE_VIEW,
 	DRAWING_TASK,
 	NUMBERS_TASK,
+	ENDGAME_VIEW
 } = require('../Views');
 
 const {
-	QuestionPrompt,
-	DrawingPrompt,
-	NumberPrompt
+	QuestionPrompts,
+	DrawingPrompts,
+	NumberPrompts
 
 } = require('../Questions.json');
 
@@ -67,6 +69,7 @@ module.exports = (socket) => {
 			roomCode: roomCode,
 			imposter: false,
 			host: true,
+			score: 0
 		});
 	});
 
@@ -78,11 +81,13 @@ module.exports = (socket) => {
 				roomCode: roomCode,
 				imposter: false,
 				host: false,
+				score: 0
 			});
 		}
 	});
 
 	socket.on(LEAVE_LOBBY, (roomCode) => {
+
 		socket.leave(roomCode);
 		removeUserFromRoom(roomCode, socket.id);
 		updatePlayerListEmit(roomCode);
@@ -107,12 +112,13 @@ module.exports = (socket) => {
 
 
 	socket.on(SEND_ANSWER, (roomCode, responseObj) => {
-		console.log(socket.id + " sent an answer");
+		
 		const room = socketRooms.get(roomCode);
 		room.recordTaskAnswer(responseObj);
-		// console.log(room.getAnswerSize(), + ' ' + room.getRoomSize());
+	
 		if (room.getAnswerSize() >= room.getRoomSize()){
 			const res = room.getAnswers();
+			
 			io.to(roomCode).emit(SHOW_ANSWERS, res);
 		}
 	});
@@ -120,6 +126,13 @@ module.exports = (socket) => {
 	socket.on(SEND_VOTES, (roomCode, playerSocketId, votes) => {
 		const room = socketRooms.get(roomCode);
 		room.recordVoteAnswer(playerSocketId, votes);
+
+		if(room.receivedAllVotes()){
+
+
+
+			io.to(roomCode).emit(SHOW_RESULTS, room.getUsersFromRoom());
+		}
 	});
 	socket.on("debug", (callback) => {
 		console.log("-------DEBUG-------");
@@ -138,6 +151,22 @@ module.exports = (socket) => {
 
 
 		//--- Pick Random Question
+	const pickRandomTask = () => {
+		// let num = Math.floor(Math.random() * 3);
+		// return num;
+		// 0 - Number task
+		// 1 - Question Task
+		// 2 - Drawing Task
+		let num = 0;
+		if (num === 0) {
+			return [NUMBERS_TASK, NumberPrompts];
+		} else if (num === 1){
+			return [QUESTION_TASK, QuestionPrompts];
+		} else if (num === 2){
+			return [DRAWING_TASK, DrawingPrompts]
+		}
+		return NUMBERS_TASK
+	}
 	const pickRandomQuestion = (questionList) => {
 		return questionList[Math.floor(Math.random() * questionList.length)]
 	}
@@ -150,53 +179,30 @@ module.exports = (socket) => {
 		const players = room.generateImposters(settings.numImposters);
 		const roomSocket = io.to(roomCode);
 
-		roomSocket.emit(START_GAME, players, settings);
-		console.log("START_GAME");
-		await delay(3000);
-		
-		roomSocket.emit(SWITCH_SCREEN, NUMBERS_TASK, pickRandomQuestion(NumberPrompt));
-		console.log('NUMBERS_TASK');
-		await delay(5000);
 
-		roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
-		await delay(5000);
-		room.clearAnswers();
+		for(let i = 0; i < settings.numRounds; i++){
+			console.log("Round " + (i+1));
+			roomSocket.emit(START_GAME, players, settings);
+			await delay(3000);
+	
+			for(let i = 0; i < settings.numTasks; i++){
+				let [view, prompts] = pickRandomTask();
+				roomSocket.emit(SWITCH_SCREEN, view, pickRandomQuestion(prompts));
+				await delay(3000);
+				roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
+				await delay(3000);
+				room.clearAnswers();
+			}
+		}
+		roomSocket.emit(SWITCH_SCREEN, ENDGAME_VIEW);
+		await delay(6000);
 
-		// roomSocket.emit(SWITCH_SCREEN, QUESTION_TASK);
-		// console.log("QUESTION_TASK");
-		// await delay(2000);
-
-
+	
 	
 
 
-		// roomSocket.emit(SWITCH_SCREEN, DRAWING_TASK);
-		// console.log("DRAWING_TASK");
-		// await delay(2000);
-
-
-		// roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
-		// console.log("VOTE_VIEW");
-		// await delay(2000);
-	
-		// roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
-		// console.log("VOTE_VIEW");
-		// await delay(2000);
 
 		roomSocket.emit(END_GAME);
-
-
-
-
-		// setTimeout(stepOne, 5000)
-		// stepOne = createTimeout(() => {
-		// 	console.log("step one finished");
-		// 	roomSocket.emit(SWITCH_SCREEN, QUESTION_TASK);
-		// }, 5000);
-
-		
-
-		// stepOne();
 	}
 
 	const addUserToRoom = (roomCode, socketObj) => {

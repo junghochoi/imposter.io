@@ -34,7 +34,6 @@ function Vote(props) {
     }, [voteArr]);
 
  
-    console.log(props.gameState.settings.numImposters);
     let content = <Loading />
     let castVote = (e) => {
         let newVoteArr = [...voteArr];

@@ -1,11 +1,11 @@
-const { NUMBERS_TASK, QUESTION_TASK, DRAWING_TASK} = require('../Views');
+const { NUMBERS_TASK, QUESTION_TASK, DRAWING_TASK } = require('../Views');
 
 class Room {
     constructor(roomCode, socketObj) {
         this.roomCode = roomCode;
         this.host = socketObj;
-        this.playerSet = new Set();
-        this.imposterSet = new Set();
+        this.playerMap = new Map();
+        this.imposterMap = new Map();
         this.settings = {
 			numImposters: 1,
 			numTasks: 3,
@@ -13,7 +13,7 @@ class Room {
         }
 
         this.prevAnswers = new Set();
-    
+        this.votesReceived = 0;
         this.addUser(socketObj);
     }
 
@@ -26,47 +26,45 @@ class Room {
     }
 
     getRoomSize = () =>{
-        return this.playerSet.size;
+        return this.playerMap.size;
     }
 
     addUser = (socketObj) => {
-        this.playerSet.add(socketObj);
+        this.playerMap.set(socketObj.socketId, socketObj);
     }
 
     getUsersFromRoom = () => {
-        const res = [...this.playerSet.keys()]
+        const res = [...this.playerMap.values()]
         return res;
     }
 
-    removeUser = (socketId) => {
-        this.playerSet.forEach((socketObj) => {
-			if (socketObj.socketId === socketId) {
-                this.playerSet.delete(socketObj);
-                
-                if (this.host === socketObj && this.playerSet.size > 0){
-                    let newHost = this.playerSet.keys().next().value;
-                    this.playerSet.delete(newHost);
-                    newHost.host = true;
-                    this.playerSet.add(newHost);
-                    this.host = newHost;
 
-                }
-			}
-		});
+    // Have to fix remove User with New map 
+    removeUser = (socketId) => {
+
+        
+        this.playerMap.delete(socketId);
+        if (this.host.socketId === socketId && this.playerMap.size > 0){
+            let newHost = this.playerMap.values().next().value;
+            newHost.host = true;
+            this.host = newHost;
+        }
     }
 
     
     generateImposters = (numImposters) => {
         // Reset Imposters
-        this.playerSet.forEach(socketObj => socketObj.imposter = false);
 
-        const indices = this.uniqueNumbers(this.playerSet.size, numImposters);
-        [...this.playerSet.keys()].forEach((socketObj, i) => {
+        
+        this.playerMap.forEach(socketObj => socketObj.imposter = false);
+
+        const indices = this.uniqueNumbers(this.playerMap.size, numImposters);
+        [...this.playerMap.values()].forEach((socketObj, i) => {
     
             if (indices.includes(i)) {
           
                 socketObj.imposter = true;
-                this.imposterSet.add(socketObj);
+                this.imposterMap.set(socketObj.socketId, socketObj);
             } 
         }); 
 
@@ -105,14 +103,29 @@ class Room {
         this.prevAnswers.clear();
     }
     getAnswers = () => {
-        return [...this.prevAnswers.keys()];
+        return [...this.prevAnswers.values()];
     }
     getAnswerSize = () => {
         return this.prevAnswers.size;
     }
     recordVoteAnswer = (playerSocketId, votesArr) => {
-        console.log(playerSocketId);
-        console.log(votesArr);
+     
+        this.votesReceived += 1;
+        let player = this.playerMap.get(playerSocketId);
+        votesArr.forEach(imposterSocketId => {
+            if (this.imposterMap.has(imposterSocketId)){
+        
+                player.score += 50;
+            }
+        });
+    }
+
+    receivedAllVotes = () => {
+        if (this.votesReceived >= this.playerMap.size){
+            this.votesReceived = 0;
+            return true;
+        }
+        return false;
     }
 } 
 module.exports = Room;
