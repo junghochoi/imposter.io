@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import socket from '../../Socket';
-import { GET_LOBBY_SETTINGS, UPDATE_LOBBY_SETTINGS, SUBMIT_LOBBY_SETTINGS } from '../../Events';  
 import { SettingOption } from '../../styled/LobbyMenuStyles';
 export class SettingsContainer extends Component {
 
