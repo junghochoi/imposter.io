@@ -1,16 +1,6 @@
-import React, { useEffect } from 'react'
-import {
-    PLAYER_ROLE 
-} from '../../Views';
+import React  from 'react'
 
 function PlayerRole(props) {
-
-
-    // useEffect(() => {
-    //     console.log("playerRole useEffect")
-    //     setTimeout(props.switchView, 2000, PLAYER_ROLE);
-        
-    // }, []);
 
     let statement = "";
     if (props.gameState.currPlayer !== null) {

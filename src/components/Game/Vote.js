@@ -27,7 +27,7 @@ function Vote(props) {
             socket.emit(SEND_VOTES, props.roomCode, socket.id, voteArrRef.current);
             socket.off(SHOW_ANSWERS);
         }
-    }, []);
+    }, [props.roomCode]);
 
     useEffect(() => {
         voteArrRef.current = voteArr;

@@ -157,6 +157,7 @@ module.exports = (socket) => {
 		// 0 - Number task
 		// 1 - Question Task
 		// 2 - Drawing Task
+		return [DRAWING_TASK, DrawingPrompts];
 		let num = 0;
 		if (num === 0) {
 			return [NUMBERS_TASK, NumberPrompts];
@@ -169,6 +170,7 @@ module.exports = (socket) => {
 	}
 	const pickRandomQuestion = (questionList) => {
 		return questionList[Math.floor(Math.random() * questionList.length)]
+		
 	}
 	const runGame = async (roomCode) => {
 			
@@ -188,9 +190,9 @@ module.exports = (socket) => {
 			for(let i = 0; i < settings.numTasks; i++){
 				let [view, prompts] = pickRandomTask();
 				roomSocket.emit(SWITCH_SCREEN, view, pickRandomQuestion(prompts));
-				await delay(5000);
+				await delay(10000);
 				roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
-				await delay(5000);
+				await delay(10000);
 				room.clearAnswers();
 			}
 			roomSocket.emit(SWITCH_SCREEN, ENDGAME_VIEW);

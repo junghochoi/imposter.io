@@ -1,13 +1,8 @@
-import React, { useEffect } from 'react'
-import {
-    QUESTION_TASK
-} from '../../Views';
+import React from 'react'
+
 
 function QuestionTask(props) {
 
-    useEffect(() => {
-        setTimeout(props.switchView, 2000, QUESTION_TASK); 
-    }, []);
 
     return (
         <div>

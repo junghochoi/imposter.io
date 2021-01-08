@@ -20,7 +20,7 @@ function NumbersTask(props) {
             let responseObj = Object.assign({answer: answerRef.current}, props.gameState.currPlayer);
             socket.emit(SEND_ANSWER, props.roomCode, responseObj);
         });
-    }, []);
+    }, [props.gameState.currPlayer, props.roomCode]);
 
 
     let buttons = [];

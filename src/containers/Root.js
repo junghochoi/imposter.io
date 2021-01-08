@@ -47,7 +47,7 @@ export class Root extends Component {
 	}
 
 	joinLobby = (formData, emitSignal) => {
-		console.log(formData);
+		
 		if (this.preventError(formData)){
 			return <Redirect to='/' />
 		}
