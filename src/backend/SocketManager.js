@@ -179,26 +179,26 @@ module.exports = (socket) => {
 		const room = socketRooms.get(roomCode);
 		const settings = room.getSettings();
 		const players = room.generateImposters(settings.numImposters);
-		const roomSocket = io.to(roomCode);
-		roomSocket.emit(START_GAME, players, settings);
+
+		io.to(roomCode).emit(START_GAME, players, settings);
 
 		for(let i = 0; i < settings.numRounds; i++){
 			console.log("Round " + (i+1));
-			roomSocket.emit(SWITCH_SCREEN, PLAYER_ROLE);
+			io.to(roomCode).emit(SWITCH_SCREEN, PLAYER_ROLE);
 			await delay(3000);
 	
 			for(let i = 0; i < settings.numTasks; i++){
 				let [view, prompts] = pickRandomTask();
-				roomSocket.emit(SWITCH_SCREEN, view, pickRandomQuestion(prompts));
+				io.to(roomCode).emit(SWITCH_SCREEN, view, pickRandomQuestion(prompts));
 				await delay(10000);
-				roomSocket.emit(SWITCH_SCREEN, VOTE);
+				io.to(roomCode).emit(SWITCH_SCREEN, VOTE);
 				await delay(10000);
 				room.clearAnswers();
 			}
-			roomSocket.emit(SWITCH_SCREEN, ENDGAME);
+			io.to(roomCode).emit(SWITCH_SCREEN, ENDGAME);
 			await delay(6000);
 		}
-		roomSocket.emit(END_GAME);
+		io.to(roomCode).emit(END_GAME);
 	}
 
 	const addUserToRoom = (roomCode, socketObj) => {

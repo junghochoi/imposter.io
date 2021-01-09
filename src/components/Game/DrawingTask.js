@@ -28,27 +28,35 @@ function DrawingTask(props) {
             socket.emit(SEND_ANSWER, props.roomCode, responseObj);
         }
     }, [props.gameState.currPlayer, props.roomCode]);
+    
+
+    let prompt;
+    if (props.currQuestion !== null){
+        console.log(props.currQuestion);
+        if(props.gameState.currPlayer.imposter) {
+            prompt = props.currQuestion.modified
+        } else{
+            prompt = props.currQuestion.original;
+        }
+    }
     return (
         <div>
-            Drawing Task
+            <h2>{prompt}</h2>
+
             <CanvasDraw
                 style={{
                     border: "1px solid #272727"
                 }}
                 ref = {drawingCanvas}
-                // ref = {drawingCanvas}
+                hideGrid
                 brushRadius={brushSettings.brushRadius}
                 lazyRadius={brushSettings.lazyRadius}
             />
             <button onClick={()=> drawingCanvas.current.undo()}>
                 Undo
             </button>
-            <button onClick={() => console.log(drawingCanvas.current.getSaveData())}>
-                Save
-            </button>
-            <button onClick={() => console.log(drawingCanvas.current)}>
-                Test
-            </button>
+    
+  
         </div>
 
      

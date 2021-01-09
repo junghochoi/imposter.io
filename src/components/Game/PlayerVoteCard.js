@@ -16,11 +16,18 @@ function PlayerVoteCard(props) {
     console.log(props);
     let content = null;
     if (props.content.task === DRAWING_TASK){
-        content = <CanvasDraw  
+        content = <CanvasDraw 
+                style={{
+                    border: "1px solid #272727"
+                }}
+                hideInterface
+                hideGrid
                 disabled
                 saveData = {props.content.answer}
-                width ={canvasSettings.width}
-                height={canvasSettings.height} 
+                width={canvasSettings.width}
+                height={canvasSettings.height}
+                brushRadius={0}
+                lazyRadius={0}
 
             />
     } else {
