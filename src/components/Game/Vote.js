@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Loading from '../../views/Loading';
 import socket from '../../Socket';
-import { PlayerVoteCard } from '../../styled/GameStyles';
+import  PlayerVoteCard  from '../Game/PlayerVoteCard';
 
 import {
     SHOW_ANSWERS,
@@ -40,17 +40,22 @@ function Vote(props) {
         newVoteArr.push(e.target.value);
         
         if (newVoteArr.length > props.gameState.settings.numImposters){
-            newVoteArr.shift()
+            newVoteArr.shift()  
         }
         voteArrRef.current = newVoteArr;
         setVoteArr(newVoteArr);
     }
     const playerVoteContainer =  responses.map(e => {
+        const content = {
+            playerName: e.currPlayer.playerName,
+            answer: e.answer,
+            task: e.task,
+        }
+
         return (
-        <PlayerVoteCard key={e.socketId} voted={voteArr.includes(e.socketId)}>
-            {e.playerName} - {e.answer}
-            <button value={e.socketId} onClick={castVote}>Vote</button>
-        </PlayerVoteCard>
+            
+            <PlayerVoteCard key={e.socketId} voted={voteArr.includes(e.socketId)} content={content} />
+
         )
     });
     

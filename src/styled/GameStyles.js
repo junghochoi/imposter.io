@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-export const PlayerVoteCard = styled.li`
+export const PlayerVoteCardStyles = styled.li`
 
     color: ${props => props.voted ? "red" : "black"};
 `;

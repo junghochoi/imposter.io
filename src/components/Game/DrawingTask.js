@@ -1,5 +1,8 @@
 import React,  { useEffect, useRef } from 'react'
 import CanvasDraw from 'react-canvas-draw';
+import { SEND_ANSWER } from '../../Events';
+import socket from '../../Socket';
+import { DRAWING_TASK } from '../../Views';
 function DrawingTask(props) {
     const brushSettings =  {
         color: "#ffc600",
@@ -12,10 +15,19 @@ function DrawingTask(props) {
     let drawingCanvas = useRef();
 
     useEffect(() => {
+        console.log(drawingCanvas.current === null);
+
+        const canvas = drawingCanvas.current
         return () => {
-            console.log(drawingCanvas.current.getSaveData());
+            let responseObj = {
+                answer: canvas.getSaveData(),
+                currPlayer: props.gameState.currPlayer,
+                task: DRAWING_TASK
+            }
+            
+            socket.emit(SEND_ANSWER, props.roomCode, responseObj);
         }
-    }, []);
+    }, [props.gameState.currPlayer, props.roomCode]);
     return (
         <div>
             Drawing Task
@@ -28,7 +40,7 @@ function DrawingTask(props) {
                 brushRadius={brushSettings.brushRadius}
                 lazyRadius={brushSettings.lazyRadius}
             />
-            <button onClick={()=> drawingCanvas.undo()}>
+            <button onClick={()=> drawingCanvas.current.undo()}>
                 Undo
             </button>
             <button onClick={() => console.log(drawingCanvas.current.getSaveData())}>

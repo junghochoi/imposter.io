@@ -4,6 +4,7 @@ import DrawingTask from '../components/Game/DrawingTask';
 import NumberTask from '../components/Game/NumbersTask';
 import QuestionTask from "../components/Game/QuestionTask";
 import EndGame from '../components/Game/EndGame';
+import Loading from '../views/Loading'
 import Vote from '../components/Game/Vote';
 import socket from "../Socket";
 
@@ -21,20 +22,21 @@ export class Game extends Component {
 			
 			views: {
 
-				playerRoleView: true,
+
+				playerRole: true,
 				
 
-				numberTaskView: false,
-				drawingTaskView: false,
-				questionTaskView: false,
+				numberTask: false,
+				drawingTask: false,
+				questionTask: false,
 
-				waitingView: false,
+				waiting: false,
 
 
-				voteView: false,
-				finalVoteView: false,
+				vote: false,
+				finalVote: false,
 
-				endGameView: false,
+				endGame: false,
 			},
 		};
 	}
@@ -65,18 +67,20 @@ export class Game extends Component {
 	render() {
 
 		let content = null;
-		if (this.state.views.playerRoleView) {
+		if (this.state.views.playerRole) {
 			content = <PlayerRole {...this.props}  currQuestion={this.state.currQuestion}/>;
-		} else if (this.state.views.numberTaskView) {
+		} else if (this.state.views.numberTask) {
 			content = <NumberTask {...this.props}  currQuestion={this.state.currQuestion}/>
-		} else if (this.state.views.drawingTaskView) {
+		} else if (this.state.views.drawingTask) {
 			content = <DrawingTask {...this.props}  currQuestion={this.state.currQuestion}/>
-		} else if (this.state.views.questionTaskView) {
+		} else if (this.state.views.questionTask) {
 			content = <QuestionTask {...this.props}  currQuestion={this.state.currQuestion}/>
-		} else if (this.state.views.voteView){
+		} else if (this.state.views.vote){
 			content = <Vote {...this.props} currQuestion={this.state.currQuestion}/>
-		} else {
+		} else if (this.state.views.endGame{
 			content = <EndGame {...this.props} />
+		} else {
+			content = <Loading />
 		}
 
         return content; 

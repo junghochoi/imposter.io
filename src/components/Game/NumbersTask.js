@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
     SEND_ANSWER,
-
-
 } from '../../Events';
+import { NUMBERS_TASK } from '../../Views'
 import socket from '../../Socket';
 
 
@@ -17,7 +16,12 @@ function NumbersTask(props) {
     
     useEffect(() => {
         return (() => {
-            let responseObj = Object.assign({answer: answerRef.current}, props.gameState.currPlayer);
+            let responseObj = {
+                answer: answerRef.current,
+                currPlayer: props.gameState.currPlayer,
+                task: NUMBERS_TASK,
+            }
+            // let responseObj = Object.assign({answer: answerRef.current}, props.gameState.currPlayer);
             socket.emit(SEND_ANSWER, props.roomCode, responseObj);
         });
     }, [props.gameState.currPlayer, props.roomCode]);

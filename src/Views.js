@@ -1,8 +1,8 @@
 module.exports = {
-    PLAYER_ROLE: "playerRoleView",
-    NUMBERS_TASK: "numberTaskView",
-    DRAWING_TASK: "drawingTaskView",
-    QUESTION_TASK: "questionTaskView",
-    VOTE_VIEW: 'voteView',
-    ENDGAME_VIEW: 'endGameView',
+    PLAYER_ROLE: "playerRole",
+    NUMBERS_TASK: "numberTask",
+    DRAWING_TASK: "drawingTask",
+    QUESTION_TASK: "questionTask",
+    VOTE: 'vote',
+    ENDGAME: 'endGame',
 }

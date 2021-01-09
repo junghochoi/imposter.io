@@ -24,10 +24,10 @@ const {
 const  {
 	PLAYER_ROLE,
 	QUESTION_TASK,
-	VOTE_VIEW,
+	VOTE,
 	DRAWING_TASK,
 	NUMBERS_TASK,
-	ENDGAME_VIEW
+	ENDGAME,
 } = require('../Views');
 
 const {
@@ -116,7 +116,7 @@ module.exports = (socket) => {
 		const room = socketRooms.get(roomCode);
 		room.recordTaskAnswer(responseObj);
 	
-		if (room.getAnswerSize() >= room.getRoomSize()){
+		if (room.getAnswerSize() >= room.getRoomSize() && room.getRoomSize() > 0){
 			const res = room.getAnswers();
 			
 			io.to(roomCode).emit(SHOW_ANSWERS, res);
@@ -127,7 +127,7 @@ module.exports = (socket) => {
 		const room = socketRooms.get(roomCode);
 		room.recordVoteAnswer(playerSocketId, votes);
 
-		if(room.receivedAllVotes()){
+		if(room.receivedAllVotes() && room.getRoomSize() > 0){
 
 
 
@@ -191,11 +191,11 @@ module.exports = (socket) => {
 				let [view, prompts] = pickRandomTask();
 				roomSocket.emit(SWITCH_SCREEN, view, pickRandomQuestion(prompts));
 				await delay(10000);
-				roomSocket.emit(SWITCH_SCREEN, VOTE_VIEW);
+				roomSocket.emit(SWITCH_SCREEN, VOTE);
 				await delay(10000);
 				room.clearAnswers();
 			}
-			roomSocket.emit(SWITCH_SCREEN, ENDGAME_VIEW);
+			roomSocket.emit(SWITCH_SCREEN, ENDGAME);
 			await delay(6000);
 		}
 		roomSocket.emit(END_GAME);
