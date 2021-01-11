@@ -152,19 +152,19 @@ module.exports = (socket) => {
 
 		//--- Pick Random Question
 	const pickRandomTask = () => {
-		// let num = Math.floor(Math.random() * 3);
+		let num = Math.floor(Math.random() * 2);
 		// return num;
 		// 0 - Number task
 		// 1 - Question Task
 		// 2 - Drawing Task
 		return [DRAWING_TASK, DrawingPrompts];
-		let num = 0;
+		// let num = 0;
 		if (num === 0) {
 			return [NUMBERS_TASK, NumberPrompts];
 		} else if (num === 1){
-			return [QUESTION_TASK, QuestionPrompts];
+			return [DRAWING_TASK, DrawingPrompts];
 		} else if (num === 2){
-			return [DRAWING_TASK, DrawingPrompts]
+			return [QUESTION_TASK, QuestionPrompts];
 		}
 		return NUMBERS_TASK
 	}
@@ -189,15 +189,17 @@ module.exports = (socket) => {
 	
 			for(let i = 0; i < settings.numTasks; i++){
 				let [view, prompts] = pickRandomTask();
-				io.to(roomCode).emit(SWITCH_SCREEN, view, pickRandomQuestion(prompts));
+				let question = pickRandomQuestion(prompts)
+				io.to(roomCode).emit(SWITCH_SCREEN, view, question);
 				await delay(10000);
-				io.to(roomCode).emit(SWITCH_SCREEN, VOTE);
-				await delay(10000);
+				io.to(roomCode).emit(SWITCH_SCREEN, VOTE, question);
+				await delay(10000000);
 				room.clearAnswers();
 			}
 			io.to(roomCode).emit(SWITCH_SCREEN, ENDGAME);
 			await delay(6000);
 		}
+		room.resetRoom();
 		io.to(roomCode).emit(END_GAME);
 	}
 

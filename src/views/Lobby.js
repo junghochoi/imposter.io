@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import socket from "../Socket";
+
 import {
 
 	START_GAME,
@@ -9,7 +10,8 @@ import {
 import { Container, Heading } from "../styled/Lib";
 import PlayerContainer from "../components/Lobby/PlayerContainer";
 import SettingsContainer from "../components/Lobby/SettingsContainer";
-import { LobbyMenuContainer } from "../styled/LobbyMenuStyles";
+import { LobbyMenuContainer, LobbyMenuDisplay } from "../styled/LobbyMenuStyles";
+
 
 export class Lobby extends Component {
 	
@@ -27,24 +29,29 @@ export class Lobby extends Component {
 			<Container>
 				<Heading>Imposter.io</Heading>
 				<LobbyMenuContainer>
-					<SettingsContainer
-						roomCode={this.props.roomCode}
-						isHost={isHost}
-						settings={settings}
-						handleSettingsChange={this.props.handleSettingsChange}
-					/>
-					<PlayerContainer
-						roomCode={this.props.roomCode}
-						currPlayer={currPlayer}
-						players={players}
-					/>
-					<button
-						onClick={this.emitStartGame}
-						disabled={!isHost}
-					>
+					<LobbyMenuDisplay>
+						<SettingsContainer
+							roomCode={this.props.roomCode}
+							isHost={isHost}
+							settings={settings}
+							handleSettingsChange={this.props.handleSettingsChange}
+						/>
+						<PlayerContainer
+							roomCode={this.props.roomCode}
+							currPlayer={currPlayer}
+							players={players}
+						/>
+					</LobbyMenuDisplay>
+
+				<button
+					onClick={this.emitStartGame}
+					disabled={!isHost}
+				>
 						Start Game
-					</button>
+				</button>
+
 				</LobbyMenuContainer>
+
 			</Container>
 		);
 	}

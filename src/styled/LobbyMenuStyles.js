@@ -1,6 +1,14 @@
 import styled from 'styled-components';
 export const LobbyMenuContainer = styled.div`
     display: flex;
+    flex-direction: column;
+    
+    justify-content: center;
+    ali
+`;
+
+export const LobbyMenuDisplay = styled.div`
+    display:flex;
     justify-content: space-around;
 `;
 

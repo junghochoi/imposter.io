@@ -13,7 +13,7 @@ function PlayerVoteCard(props) {
         height: 120,
     }
 
-    console.log(props);
+    
     let content = null;
     if (props.content.task === DRAWING_TASK){
         content = <CanvasDraw 
@@ -24,8 +24,8 @@ function PlayerVoteCard(props) {
                 hideGrid
                 disabled
                 saveData = {props.content.answer}
-                width={canvasSettings.width}
-                height={canvasSettings.height}
+                canvasWidth={canvasSettings.width}
+                canvasHeight={canvasSettings.height}
                 brushRadius={0}
                 lazyRadius={0}
 
@@ -33,12 +33,16 @@ function PlayerVoteCard(props) {
     } else {
         content = <h5>{props.content.answer}</h5>
     }
-
+    
     return (
+      
         <PlayerVoteCardStyles key={props.key} voted={props.voted}>
-            {props.content.playerName}
+            {props.content.playerName} 
             {content}
         </PlayerVoteCardStyles>
+    
+
+
     )
 }
 

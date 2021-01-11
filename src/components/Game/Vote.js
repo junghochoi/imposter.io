@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Loading from '../../views/Loading';
 import socket from '../../Socket';
+import { PlayerVoteCardContainer } from '../../styled/GameStyles';
 import  PlayerVoteCard  from '../Game/PlayerVoteCard';
 
 import {
@@ -34,42 +35,72 @@ function Vote(props) {
     }, [voteArr]);
 
  
-    let content = <Loading />
+    
     let castVote = (e) => {
+        
         let newVoteArr = [...voteArr];
-        newVoteArr.push(e.target.value);
+        
+        
+        newVoteArr.push(e.currentTarget.dataset.vote)
         
         if (newVoteArr.length > props.gameState.settings.numImposters){
             newVoteArr.shift()  
         }
         voteArrRef.current = newVoteArr;
+     
         setVoteArr(newVoteArr);
     }
-    const playerVoteContainer =  responses.map(e => {
+
+
+    const playerVoteCards =  responses.map(e => {
         const content = {
             playerName: e.currPlayer.playerName,
             answer: e.answer,
             task: e.task,
         }
-
+      
+      
+ 
         return (
             
-            <PlayerVoteCard key={e.socketId} voted={voteArr.includes(e.socketId)} content={content} />
+            <span key={e.currPlayer.socketId}  data-vote={e.currPlayer.socketId} onClick={castVote} >
+                <PlayerVoteCard 
+                    voted={voteArr.includes(e.currPlayer.socketId)} 
+                    content={content}
+                />
+            </span>
+
+
+                
+           
+ 
+            
 
         )
     });
     
 
+    let crewmatePrompt = '';
+    
+    if (props.currQuestion !== null) {
+        console.log(props.currQuestion)
+        crewmatePrompt = props.currQuestion.original === undefined ? props.currQuestion : props.currQuestion.original;
+    } 
     if (receivedRes) {
-        content = (
-            <ul>
-                {playerVoteContainer}
-            </ul>
-        )
+        return (
+            <div>
+                <h2>{crewmatePrompt}</h2>
+                <PlayerVoteCardContainer>
+                    {playerVoteCards}
+                </PlayerVoteCardContainer>
+            </div>
+
+            
+        ) 
         
     }
     
-    return content;
+    return <Loading /> ;
 }
 
 export default Vote

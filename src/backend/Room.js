@@ -8,8 +8,8 @@ class Room {
         this.imposterMap = new Map();
         this.settings = {
 			numImposters: 1,
-			numTasks: 3,
-            numRounds: 3
+			numTasks: 1,
+            numRounds: 1
         }
 
         this.prevAnswers = new Set();
@@ -126,6 +126,13 @@ class Room {
             return true;
         }
         return false;
+    }
+
+    resetRoom = () => {
+        this.imposterMap.clear();
+        this.playerMap.forEach(playerObj => {
+            playerObj.score = 0;
+        })
     }
 } 
 module.exports = Room;
