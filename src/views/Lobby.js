@@ -10,7 +10,7 @@ import {
 import { Container, Heading } from "../styled/Lib";
 import PlayerContainer from "../components/Lobby/PlayerContainer";
 import SettingsContainer from "../components/Lobby/SettingsContainer";
-import { LobbyMenuContainer, LobbyMenuDisplay } from "../styled/LobbyMenuStyles";
+import { LobbyMenuContainer, LobbyMenuDisplay, StartButton } from "../styled/LobbyMenuStyles";
 
 
 export class Lobby extends Component {
@@ -43,12 +43,12 @@ export class Lobby extends Component {
 						/>
 					</LobbyMenuDisplay>
 
-				<button
+				<StartButton
 					onClick={this.emitStartGame}
 					disabled={!isHost}
 				>
 						Start Game
-				</button>
+				</StartButton>
 
 				</LobbyMenuContainer>
 

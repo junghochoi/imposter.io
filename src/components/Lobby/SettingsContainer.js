@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { SettingOption } from '../../styled/LobbyMenuStyles';
+import { SettingsContainerStyles, SettingOption } from '../../styled/LobbyMenuStyles';
 export class SettingsContainer extends Component {
 
     
@@ -7,7 +7,7 @@ export class SettingsContainer extends Component {
 
     render() {
         return (
-            <div>
+            <SettingsContainerStyles>
                 <h2>Room Code: {this.props.roomCode}</h2>
                 
                 <SettingOption>
@@ -54,7 +54,7 @@ export class SettingsContainer extends Component {
                     </select>
                 </SettingOption>
 
-            </div>
+            </SettingsContainerStyles>
         )
     }
 }
