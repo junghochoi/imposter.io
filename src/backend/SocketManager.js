@@ -193,7 +193,7 @@ module.exports = (socket) => {
 				io.to(roomCode).emit(SWITCH_SCREEN, view, question);
 				await delay(10000);
 				io.to(roomCode).emit(SWITCH_SCREEN, VOTE, question);
-				await delay(10000);
+				await delay(1000000);
 				room.clearAnswers();
 			}
 			io.to(roomCode).emit(SWITCH_SCREEN, ENDGAME);

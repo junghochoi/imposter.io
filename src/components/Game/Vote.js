@@ -6,6 +6,7 @@ import Loading from '../../views/Loading';
 import socket from '../../Socket';
 import { PlayerVoteCardContainer } from '../../styled/GameStyles';
 import  PlayerVoteCard  from '../Game/PlayerVoteCard';
+import { Container, Heading, Underline } from '../../styled/Lib';
 
 import {
     SHOW_ANSWERS,
@@ -88,12 +89,13 @@ function Vote(props) {
     } 
     if (receivedRes) {
         return (
-            <div>
-                <h2>{crewmatePrompt}</h2>
+            <Container>
+                <Heading><Underline>Crewmate Prompt</Underline></Heading>
+                <Heading>{crewmatePrompt}</Heading>
                 <PlayerVoteCardContainer>
                     {playerVoteCards}
                 </PlayerVoteCardContainer>
-            </div>
+            </Container>
 
             
         ) 

@@ -5,10 +5,12 @@ export const Container = styled.div`
 	padding: 0 30px;
 	margin-right: auto;
 	margin-left: auto;
+	
 `;
 
 export const Heading = styled.h1`
 	text-align: center;
+	font-family: "BitMap";
 `;
 
 /*
@@ -24,4 +26,8 @@ export const SettingsContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 
+`;
+
+export const Underline = styled.div`
+	text-decoration: underline;
 `;
