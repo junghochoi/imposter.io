@@ -7,10 +7,18 @@ export const Container = styled.div`
 	margin-left: auto;
 	
 `;
-
+export const Centered = styled.div`
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 export const Heading = styled.h1`
 	text-align: center;
-	font-family: "BitMap";
+	font-family: 'Bitmap';
+	
 `;
 
 /*

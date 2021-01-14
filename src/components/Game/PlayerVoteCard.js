@@ -1,5 +1,5 @@
 import React from 'react'
-import { PlayerVoteCardStyles } from '../../styled/GameStyles';
+import { PlayerVoteCardStyles, PlayerVoteName, PlayerVoteAnswer } from '../../styled/GameStyles';
 import CanvasDraw from 'react-canvas-draw';
 import {
     DRAWING_TASK,
@@ -31,14 +31,14 @@ function PlayerVoteCard(props) {
 
             />
     } else {
-        content = <h5>{props.content.answer}</h5>
+        content = <PlayerVoteAnswer>{props.content.answer}</PlayerVoteAnswer>
     }
     
     return (
       
         <PlayerVoteCardStyles key={props.key} voted={props.voted}>
-            {props.content.playerName} 
-            {content}
+            <PlayerVoteName>{props.content.playerName}</PlayerVoteName> 
+            <PlayerVoteAnswer>{content}</PlayerVoteAnswer>
         </PlayerVoteCardStyles>
     
 

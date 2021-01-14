@@ -5,6 +5,9 @@ import {
 import { NUMBERS_TASK } from '../../Views'
 import socket from '../../Socket';
 
+import { Container } from '../../styled/Lib';
+import { NumberTaskContainer, NumberTaskPrompt, NumberButton } from '../../styled/GameStyles';
+
 
 function NumbersTask(props) {
     const [answer, setAnswer] = useState(5);
@@ -29,7 +32,7 @@ function NumbersTask(props) {
 
     let buttons = [];
     for(let i = 1; i <= 10; i++){
-        const b = <button key={i} onClick={()=>setAnswer(i)}>{i}</button>
+        const b = <NumberButton key={i} onClick={()=>setAnswer(i)} selected={answer===i}>{i}</NumberButton>
         buttons.push(b);
     }
 
@@ -44,11 +47,13 @@ function NumbersTask(props) {
   
 
     return (
-        <div>
-            <h1>My response is {answer}</h1>
-            <h2>{prompt}</h2>
-            { buttons }
-        </div>
+        
+        <NumberTaskContainer>
+            
+            <NumberTaskPrompt>{prompt}</NumberTaskPrompt>
+            <div>{ buttons }</div>
+        </NumberTaskContainer>
+        
     )
 }
 

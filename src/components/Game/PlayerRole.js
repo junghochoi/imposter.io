@@ -1,15 +1,18 @@
 import React  from 'react'
-
+import { PlayerRoleName, PlayerRoleReveal } from '../../styled/GameStyles'
 function PlayerRole(props) {
 
-    let statement = "";
+   
+    let role = '';
     if (props.gameState.currPlayer !== null) {
-        
-        let role =  props.gameState.currPlayer.imposter ? 'IMPOSTER' : 'CREWMATE'
-        statement = props.gameState.currPlayer.playerName +  ' , you are a ' + role;
+        role =  props.gameState.currPlayer.imposter ? 'IMPOSTER' : 'CREWMATE'
     }
     return (
-        <h1>{statement}</h1>
+        <>
+            <PlayerRoleName>{props.gameState.currPlayer.playerName}</PlayerRoleName>
+            <PlayerRoleReveal imposter={props.gameState.currPlayer.imposter}>{role}</ PlayerRoleReveal>
+        </> 
+        
     )
 }
 

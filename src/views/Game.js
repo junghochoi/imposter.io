@@ -6,6 +6,7 @@ import QuestionTask from "../components/Game/QuestionTask";
 import EndGame from '../components/Game/EndGame';
 import Loading from '../views/Loading'
 import Vote from '../components/Game/Vote';
+import { Centered } from '../styled/Lib';
 import socket from "../Socket";
 
 import {
@@ -83,7 +84,7 @@ export class Game extends Component {
 			content = <Loading />
 		}
 
-        return content; 
+        return <Centered>{content}</Centered>; 
 	}
 }
 

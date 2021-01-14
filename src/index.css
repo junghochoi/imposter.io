@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+@font-face {
+  font-family: 'Bitmap';
+  src:  url('./fonts/bitmapfont.woff2') format('woff2'),
+        url('./fonts/bitmapfont.woff') format('woff');
+}
