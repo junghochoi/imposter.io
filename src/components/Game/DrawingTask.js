@@ -1,11 +1,13 @@
 import React,  { useEffect, useRef } from 'react'
-import CanvasDraw from 'react-canvas-draw';
+
 import { SEND_ANSWER } from '../../Events';
 import socket from '../../Socket';
 import { DRAWING_TASK } from '../../Views';
 import { DrawingCanvas, TaskContainer } from '../../styled/GameStyles'
+import {FaUndo} from 'react-icons/fa'; 
 
 import { TaskPrompt } from '../../styled/GameStyles';
+import { Button } from '../../styled/Lib';
 function DrawingTask(props) {
     const brushSettings =  {
         color: "#ffc600",
@@ -54,9 +56,9 @@ function DrawingTask(props) {
             />
             
 
-            <button onClick={()=> drawingCanvas.current.undo()}>
-                Undo
-            </button>
+            <Button onClick={()=> drawingCanvas.current.undo()}>
+                <FaUndo />
+            </Button>
             
             
            

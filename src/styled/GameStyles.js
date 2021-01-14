@@ -68,9 +68,9 @@ export const DrawingTaskContainer = styled.div`
 export const DrawingCanvas = styled(CanvasDraw)`
     border: 1px solid #272727;
     margin: 0 auto;
-
-
 `
+
+
 
 
 // Vote View
