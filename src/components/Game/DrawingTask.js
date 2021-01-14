@@ -3,6 +3,9 @@ import CanvasDraw from 'react-canvas-draw';
 import { SEND_ANSWER } from '../../Events';
 import socket from '../../Socket';
 import { DRAWING_TASK } from '../../Views';
+import { DrawingCanvas, TaskContainer } from '../../styled/GameStyles'
+
+import { TaskPrompt } from '../../styled/GameStyles';
 function DrawingTask(props) {
     const brushSettings =  {
         color: "#ffc600",
@@ -40,24 +43,27 @@ function DrawingTask(props) {
         }
     }
     return (
-        <div>
-            <h2>{prompt}</h2>
+        <TaskContainer>
+            <TaskPrompt>{prompt}</TaskPrompt>
 
-            <CanvasDraw
-                style={{
-                    border: "1px solid #272727"
-                }}
+            <DrawingCanvas
                 ref = {drawingCanvas}
                 hideGrid
                 brushRadius={brushSettings.brushRadius}
                 lazyRadius={brushSettings.lazyRadius}
             />
+            
+
             <button onClick={()=> drawingCanvas.current.undo()}>
                 Undo
             </button>
+            
+            
+           
+
     
   
-        </div>
+        </TaskContainer>
 
      
     )

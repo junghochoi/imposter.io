@@ -1,5 +1,20 @@
 import styled from 'styled-components';
+import CanvasDraw from 'react-canvas-draw';
 
+
+export const TaskContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+`;
+export const TaskPrompt = styled.h2`
+    font-family: "Bitmap";
+    font-size: 2rem;
+    text-align: center;
+    color: black;
+
+`;
 
 // Player Role View
 export const PlayerRoleName = styled.h3`
@@ -22,20 +37,7 @@ export const PlayerRoleReveal = styled.h1`
 
 // Number Task View
 
-export const NumberTaskContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-`;
 
-export const NumberTaskPrompt = styled.h2`
-    font-family: "Bitmap";
-    font-size: 2rem;
-    text-align: center;
-    color: black;
-
-`;
 
 export const NumberButton = styled.button` 
     background-color: ${props => props.selected  ? '#44a133' : '#505050'}; /* Green */
@@ -54,6 +56,21 @@ export const NumberButton = styled.button`
         outline: none;
     }
 `;
+
+//Drwaing Task
+
+
+export const DrawingTaskContainer = styled.div`
+    display: flex;
+    align
+
+`;
+export const DrawingCanvas = styled(CanvasDraw)`
+    border: 1px solid #272727;
+    margin: 0 auto;
+
+
+`
 
 
 // Vote View

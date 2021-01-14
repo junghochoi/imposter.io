@@ -5,8 +5,7 @@ import {
 import { NUMBERS_TASK } from '../../Views'
 import socket from '../../Socket';
 
-import { Container } from '../../styled/Lib';
-import { NumberTaskContainer, NumberTaskPrompt, NumberButton } from '../../styled/GameStyles';
+import { TaskContainer, TaskPrompt, NumberButton } from '../../styled/GameStyles';
 
 
 function NumbersTask(props) {
@@ -48,11 +47,10 @@ function NumbersTask(props) {
 
     return (
         
-        <NumberTaskContainer>
-            
-            <NumberTaskPrompt>{prompt}</NumberTaskPrompt>
+        <TaskContainer>
+            <TaskPrompt>{prompt}</TaskPrompt>
             <div>{ buttons }</div>
-        </NumberTaskContainer>
+        </TaskContainer>
         
     )
 }

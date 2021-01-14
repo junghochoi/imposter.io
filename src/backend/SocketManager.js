@@ -114,6 +114,9 @@ module.exports = (socket) => {
 	socket.on(SEND_ANSWER, (roomCode, responseObj) => {
 		
 		const room = socketRooms.get(roomCode);
+		if (room === undefined) {
+			return;
+		}
 		room.recordTaskAnswer(responseObj);
 	
 		if (room.getAnswerSize() >= room.getRoomSize() && room.getRoomSize() > 0){
@@ -125,12 +128,13 @@ module.exports = (socket) => {
 	
 	socket.on(SEND_VOTES, (roomCode, playerSocketId, votes) => {
 		const room = socketRooms.get(roomCode);
+
+		if (room === undefined) {
+			return;
+		}
+
 		room.recordVoteAnswer(playerSocketId, votes);
-
 		if(room.receivedAllVotes() && room.getRoomSize() > 0){
-
-
-
 			io.to(roomCode).emit(SHOW_RESULTS, room.getUsersFromRoom());
 		}
 	});
@@ -158,7 +162,7 @@ module.exports = (socket) => {
 		// 1 - Question Task
 		// 2 - Drawing Task
 		// return [DRAWING_TASK, DrawingPrompts];
-		let num = 0;
+		let num = 1;
 		if (num === 0) {
 			return [NUMBERS_TASK, NumberPrompts];
 		} else if (num === 1){
@@ -182,6 +186,10 @@ module.exports = (socket) => {
 
 		io.to(roomCode).emit(START_GAME, players, settings);
 
+		if (room === undefined) {
+			return;
+		}
+
 		for(let i = 0; i < settings.numRounds; i++){
 			console.log("Round " + (i+1));
 			io.to(roomCode).emit(SWITCH_SCREEN, PLAYER_ROLE);
@@ -191,7 +199,7 @@ module.exports = (socket) => {
 				let [view, prompts] = pickRandomTask();
 				let question = pickRandomQuestion(prompts)
 				io.to(roomCode).emit(SWITCH_SCREEN, view, question);
-				await delay(10000);
+				await delay(2000000);
 				io.to(roomCode).emit(SWITCH_SCREEN, VOTE, question);
 				await delay(2000000);
 				room.clearAnswers();
