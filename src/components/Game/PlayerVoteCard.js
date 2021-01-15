@@ -3,8 +3,6 @@ import { PlayerVoteCardStyles, PlayerVoteName, PlayerVoteAnswer } from '../../st
 import CanvasDraw from 'react-canvas-draw';
 import {
     DRAWING_TASK,
-    NUMBERS_TASK,
-    QUESTION_TASK
 } from '../../Views';
 
 function PlayerVoteCard(props) {

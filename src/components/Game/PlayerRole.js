@@ -1,5 +1,7 @@
 import React  from 'react'
 import { PlayerRoleName, PlayerRoleReveal } from '../../styled/GameStyles'
+
+
 function PlayerRole(props) {
 
    
@@ -11,6 +13,7 @@ function PlayerRole(props) {
         <>
             <PlayerRoleName>{props.gameState.currPlayer.playerName}</PlayerRoleName>
             <PlayerRoleReveal imposter={props.gameState.currPlayer.imposter}>{role}</ PlayerRoleReveal>
+            
         </> 
         
     )

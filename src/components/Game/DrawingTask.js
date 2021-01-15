@@ -20,7 +20,7 @@ function DrawingTask(props) {
     let drawingCanvas = useRef();
 
     useEffect(() => {
-        console.log(drawingCanvas.current === null);
+
 
         const canvas = drawingCanvas.current
         return () => {
@@ -37,7 +37,7 @@ function DrawingTask(props) {
 
     let prompt;
     if (props.currQuestion !== null){
-        console.log(props.currQuestion);
+
         if(props.gameState.currPlayer.imposter) {
             prompt = props.currQuestion.modified
         } else{

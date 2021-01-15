@@ -179,33 +179,38 @@ module.exports = (socket) => {
 	const runGame = async (roomCode) => {
 			
 		const delay = ms => new Promise(res => setTimeout(res, ms));
-
-		const room = socketRooms.get(roomCode);
+		const getTime = ms => { return Date.now() + ms };
+		const timer = {
+			playerRole: 3000,
+			question: 30000,
+			vote: 30000,
+			endgame: 15000,
+		}
+		const room = socketRooms.get(roomCode); if (room === undefined) return;
 		const settings = room.getSettings();
 		const players = room.generateImposters(settings.numImposters);
+	
 
 		io.to(roomCode).emit(START_GAME, players, settings);
 
-		if (room === undefined) {
-			return;
-		}
+
 
 		for(let i = 0; i < settings.numRounds; i++){
 			console.log("Round " + (i+1));
-			io.to(roomCode).emit(SWITCH_SCREEN, PLAYER_ROLE);
-			await delay(3000);
+			io.to(roomCode).emit(SWITCH_SCREEN, PLAYER_ROLE, getTime(timer.playerRole));
+			await delay(timer.playerRole);
 	
 			for(let i = 0; i < settings.numTasks; i++){
 				let [view, prompts] = pickRandomTask();
 				let question = pickRandomQuestion(prompts)
-				io.to(roomCode).emit(SWITCH_SCREEN, view, question);
-				await delay(2000000);
-				io.to(roomCode).emit(SWITCH_SCREEN, VOTE, question);
-				await delay(2000000);
+				io.to(roomCode).emit(SWITCH_SCREEN, view, question, getTime(timer.question));
+				await delay(timer.question);
+				io.to(roomCode).emit(SWITCH_SCREEN, VOTE, question, getTime(timer.vote));
+				await delay(timer.vote);
 				room.clearAnswers();
 			}
-			io.to(roomCode).emit(SWITCH_SCREEN, ENDGAME);
-			await delay(6000);
+			io.to(roomCode).emit(SWITCH_SCREEN, ENDGAME, undefined, getTime(timer.endgame));
+			await delay(timer.endgame);
 		}
 		room.resetRoom();
 		io.to(roomCode).emit(END_GAME);
