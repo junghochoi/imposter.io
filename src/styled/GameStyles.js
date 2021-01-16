@@ -88,7 +88,7 @@ export const PlayerVoteCardStyles = styled.div`
     padding: 6px;
     margin: 5px;
     min-width: 110px;
-    min-height: 110px;
+    min-height: ${props => props.half ? "55px" : "110px"};
   
     
     border-radius: 10px;

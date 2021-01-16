@@ -73,7 +73,7 @@ export class Game extends Component {
 
 
 	render() {
-		console.log(this.state);
+		
 		let content = null;
 		if (this.state.view.playerRole) {
 			content = <PlayerRole {...this.props}  currQuestion={this.state.currQuestion} timer={this.state.timer}/>;
@@ -85,12 +85,12 @@ export class Game extends Component {
 			content = <QuestionTask {...this.props}  currQuestion={this.state.currQuestion} timer={this.state.timer}/>
 		} else if (this.state.view.vote){
 			content = <Vote {...this.props} currQuestion={this.state.currQuestion} timer={this.state.timer}/>
-		} else if (this.state.view.endGame){
-			content = <EndGame {...this.props} />
 		} else if (this.state.view.finalVote) {
-			content = <FinalVote {...this.props}/>
+			content = <FinalVote {...this.props} timer={this.state.timer}/>
 
-		} else {
+		}  else if (this.state.view.endGame){
+			content = <EndGame {...this.props} />
+		}  else {
 			content = <Loading />
 		}
 

@@ -108,14 +108,14 @@ class Room {
     getAnswerSize = () => {
         return this.prevAnswers.size;
     }
-    recordVoteAnswer = (playerSocketId, votesArr) => {
+    recordVoteAnswer = (playerSocketId, votesArr, pts) => {
      
         this.votesReceived += 1;
         let player = this.playerMap.get(playerSocketId);
         votesArr.forEach(imposterSocketId => {
             if (this.imposterMap.has(imposterSocketId)){
         
-                player.score += 50;
+                player.score += pts;
             }
         });
     }

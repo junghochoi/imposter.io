@@ -127,17 +127,17 @@ module.exports = (socket) => {
 		}
 	});
 	
-	socket.on(SEND_VOTES, (roomCode, playerSocketId, votes) => {
+	socket.on(SEND_VOTES, (roomCode, playerSocketId, votes, pts, endgame) => {
 		const room = socketRooms.get(roomCode);
 
 		if (room === undefined) {
 			return;
 		}
 
-		room.recordVoteAnswer(playerSocketId, votes);
-		// if(room.receivedAllVotes() && room.getRoomSize() > 0){
-		// 	io.to(roomCode).emit(SHOW_RESULTS, room.getUsersFromRoom());
-		// }
+		room.recordVoteAnswer(playerSocketId, votes, pts);
+		if(room.receivedAllVotes() && room.getRoomSize() > 0){
+			io.to(roomCode).emit(SHOW_RESULTS, room.getUsersFromRoom());
+		}
 	});
 	socket.on("debug", (callback) => {
 		console.log("-------DEBUG-------");

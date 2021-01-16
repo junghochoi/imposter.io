@@ -27,7 +27,7 @@ function Vote(props) {
             setResponses(res);
         });
         return () => {
-            socket.emit(SEND_VOTES, props.roomCode, socket.id, voteArrRef.current);
+            socket.emit(SEND_VOTES, props.roomCode, socket.id, voteArrRef.current, 50, false);
             socket.off(SHOW_ANSWERS);
         }
     }, [props.roomCode]);

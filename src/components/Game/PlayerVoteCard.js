@@ -3,6 +3,8 @@ import { PlayerVoteCardStyles, PlayerVoteName, PlayerVoteAnswer } from '../../st
 import CanvasDraw from 'react-canvas-draw';
 import {
     DRAWING_TASK,
+    QUESTION_TASK,
+    NUMBERS_TASK,
 } from '../../Views';
 
 function PlayerVoteCard(props) {
@@ -28,20 +30,25 @@ function PlayerVoteCard(props) {
                 lazyRadius={0}
 
             />
-    } else {
+    } else if (props.content.task === QUESTION_TASK || props.content.task === NUMBERS_TASK) {
         content = <PlayerVoteAnswer>{props.content.answer}</PlayerVoteAnswer>
+    } 
+    
+    if (content === null){
+        return (
+            <PlayerVoteCardStyles key={props.key} voted={props.voted} half>
+                <PlayerVoteName>{props.content.playerName}</PlayerVoteName> 
+            </PlayerVoteCardStyles>
+        )
+    } else {
+        return (
+            <PlayerVoteCardStyles key={props.key} voted={props.voted}>
+                <PlayerVoteName>{props.content.playerName}</PlayerVoteName> 
+                {content}
+            </PlayerVoteCardStyles>
+        )
     }
-    
-    return (
-      
-        <PlayerVoteCardStyles key={props.key} voted={props.voted}>
-            <PlayerVoteName>{props.content.playerName}</PlayerVoteName> 
-            <PlayerVoteAnswer>{content}</PlayerVoteAnswer>
-        </PlayerVoteCardStyles>
-    
 
-
-    )
 }
 
 export default PlayerVoteCard
