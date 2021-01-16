@@ -10,19 +10,21 @@ const countDownAnimation = keyframes`
 const Bar = styled.div`
         
     height: 25px;
+    width: 100%;
     background: linear-gradient(to bottom, red, #900);
 
+    position: fixed;
+    left: 0;
+    bottom: 0;
 
     animation-name: ${countDownAnimation};
-    animation-duration: 3s;
-    /* animation-duration: ${props => props.timer}; */
+    animation-duration: ${props => props.timer}ms;
+    animation-timing-function: linear;
     animation-iteration-count: 1;
     transform-origin: left center;
 `
 function Timer(props) {
-
-
-
+    console.log(props.timer);
     return (
         <Bar  timer={props.timer}/>
     )

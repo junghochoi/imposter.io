@@ -1,13 +1,13 @@
 import React,  { useEffect, useRef } from 'react'
-
-import { SEND_ANSWER } from '../../Events';
+import Timer from './Timer';
 import socket from '../../Socket';
+import { SEND_ANSWER } from '../../Events';
+
 import { DRAWING_TASK } from '../../Views';
 import { DrawingCanvas, TaskContainer } from '../../styled/GameStyles'
 import {FaUndo} from 'react-icons/fa'; 
-
 import { TaskPrompt } from '../../styled/GameStyles';
-import { Button } from '../../styled/Lib';
+import { Button, Centered } from '../../styled/Lib';
 function DrawingTask(props) {
     const brushSettings =  {
         color: "#ffc600",
@@ -45,6 +45,7 @@ function DrawingTask(props) {
         }
     }
     return (
+        <>
         <TaskContainer>
             <TaskPrompt>{prompt}</TaskPrompt>
 
@@ -59,14 +60,11 @@ function DrawingTask(props) {
             <Button onClick={()=> drawingCanvas.current.undo()}>
                 <FaUndo />
             </Button>
-            
-            
-           
-
-    
-  
+     
         </TaskContainer>
-
+        
+        <Timer timer={props.timer}/>
+        </>
      
     )
 }

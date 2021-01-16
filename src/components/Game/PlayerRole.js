@@ -1,4 +1,6 @@
-import React  from 'react'
+import React  from 'react';
+import Timer from './Timer';
+import { Centered } from '../../styled/Lib';
 import { PlayerRoleName, PlayerRoleReveal } from '../../styled/GameStyles'
 
 
@@ -11,10 +13,13 @@ function PlayerRole(props) {
     }
     return (
         <>
-            <PlayerRoleName>{props.gameState.currPlayer.playerName}</PlayerRoleName>
-            <PlayerRoleReveal imposter={props.gameState.currPlayer.imposter}>{role}</ PlayerRoleReveal>
+        
+        <PlayerRoleName>{props.gameState.currPlayer.playerName}</PlayerRoleName>
+        <PlayerRoleReveal imposter={props.gameState.currPlayer.imposter}>{role}</ PlayerRoleReveal>
             
-        </> 
+        
+        <Timer timer={props.timer} />
+        </>
         
     )
 }

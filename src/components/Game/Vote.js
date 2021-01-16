@@ -6,7 +6,8 @@ import Loading from '../../views/Loading';
 import socket from '../../Socket';
 import { PlayerVoteCardContainer } from '../../styled/GameStyles';
 import  PlayerVoteCard  from '../Game/PlayerVoteCard';
-import { Container, Heading, Underline } from '../../styled/Lib';
+import { Container, Heading, Underline  } from '../../styled/Lib';
+import Timer from './Timer';
 
 import {
     SHOW_ANSWERS,
@@ -40,8 +41,6 @@ function Vote(props) {
     let castVote = (e) => {
         
         let newVoteArr = [...voteArr];
-        
-        
         newVoteArr.push(e.currentTarget.dataset.vote)
         
         if (newVoteArr.length > props.gameState.settings.numImposters){
@@ -60,23 +59,13 @@ function Vote(props) {
             task: e.task,
         }
       
-      
- 
-        return (
-            
+        return (      
             <span key={e.currPlayer.socketId}  data-vote={e.currPlayer.socketId} onClick={castVote} >
                 <PlayerVoteCard 
                     voted={voteArr.includes(e.currPlayer.socketId)} 
                     content={content}
                 />
             </span>
-
-
-                
-           
- 
-            
-
         )
     });
     
@@ -89,6 +78,7 @@ function Vote(props) {
     } 
     if (receivedRes) {
         return (
+            <>
             <Container>
                 <Heading><Underline>Crewmate Prompt</Underline></Heading>
                 <Heading>{crewmatePrompt}</Heading>
@@ -96,7 +86,8 @@ function Vote(props) {
                     {playerVoteCards}
                 </PlayerVoteCardContainer>
             </Container>
-
+            <Timer timer={props.timer}/>
+            </>
             
         ) 
         

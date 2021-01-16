@@ -6,7 +6,7 @@ import QuestionTask from "../components/Game/QuestionTask";
 import EndGame from '../components/Game/EndGame';
 import Loading from '../views/Loading'
 import Vote from '../components/Game/Vote';
-import Timer from '../components/Game/Timer'
+import FinalVote from '../components/Game/FinalVote';
 import { Centered } from '../styled/Lib';
 import socket from "../Socket";
 
@@ -18,26 +18,27 @@ import {
 export class Game extends Component {
 	constructor(props) {
 		super(props);
-		this.timer = React.createRef(3000);
-		this.currQuestion = React.createRef(null);
+
 		this.state = {
-		
+			timer: 3000,
+			currQuestion: null,
+			view: {
+				playerRole: true,
 			
 
-			playerRole: true,
-			
+				numberTask: false,
+				drawingTask: false,
+				questionTask: false,
+	
+				waiting: false,
+	
+	
+				vote: false,
+				finalVote: false,
+	
+				endGame: false,
+			}
 
-			numberTask: false,
-			drawingTask: false,
-			questionTask: false,
-
-			waiting: false,
-
-
-			vote: false,
-			finalVote: false,
-
-			endGame: false,
 		
 		};
 	}
@@ -48,48 +49,69 @@ export class Game extends Component {
 	componentDidMount() {
 		socket.on(SWITCH_SCREEN, (nextView, question, timestamp) => {
 			
-			this.currQuestion.current = question;
-			this.timer.current = timestamp - Date.now();
+	
 			this.setState(prevState =>{
-				let views = Object.assign({}, prevState);
-				Object.keys(views).forEach(viewName => views[viewName] = false);
-				views[nextView] = true;
+				
+				let newViews = Object.assign({}, prevState.view);
+				Object.keys(newViews).forEach(viewName => newViews[viewName] = false);
+				newViews[nextView] = true;
 
-				return views;
+				return {
+					timer: timestamp - Date.now(),
+					currQuestion: question,
+					view: newViews,
+				};
 			});
 			
 						 
 		});
 	}
+	componentWillUnmount() {
+		socket.off(SWITCH_SCREEN);
+	}
     
 
 
 	render() {
-
+		console.log(this.state);
 		let content = null;
-		if (this.state.playerRole) {
-			content = <PlayerRole {...this.props}  currQuestion={this.currQuestion.current} timer={this.timer.current} />;
-		} else if (this.state.numberTask) {
-			content = <NumberTask {...this.props}  currQuestion={this.currQuestion.current} timer={this.timer.current}/>
-		} else if (this.state.drawingTask) {
-			content = <DrawingTask {...this.props}  currQuestion={this.currQuestion.current} timer={this.timer.current}/>
-		} else if (this.state.questionTask) {
-			content = <QuestionTask {...this.props}  currQuestion={this.currQuestion.current} timer={this.timer.current}/>
-		} else if (this.state.vote){
-			content = <Vote {...this.props} currQuestion={this.currQuestion.current} timer={this.timer.current}/>
-		} else if (this.state.endGame){
+		if (this.state.view.playerRole) {
+			content = <PlayerRole {...this.props}  currQuestion={this.state.currQuestion} timer={this.state.timer}/>;
+		} else if (this.state.view.numberTask) {
+			content = <NumberTask {...this.props}  currQuestion={this.state.currQuestion} timer={this.state.timer}/>
+		} else if (this.state.view.drawingTask) {
+			content = <DrawingTask {...this.props}  currQuestion={this.state.currQuestion} timer={this.state.timer}/>
+		} else if (this.state.view.questionTask) {
+			content = <QuestionTask {...this.props}  currQuestion={this.state.currQuestion} timer={this.state.timer}/>
+		} else if (this.state.view.vote){
+			content = <Vote {...this.props} currQuestion={this.state.currQuestion} timer={this.state.timer}/>
+		} else if (this.state.view.endGame){
 			content = <EndGame {...this.props} />
+		} else if (this.state.view.finalVote) {
+			content = <FinalVote {...this.props}/>
+
 		} else {
 			content = <Loading />
 		}
 
-        return (
-		
-		<Centered>
-			{content}
-			<Timer timer={this.timer.current}/>
-		</Centered> 
-		); 
+
+		return (
+			<Centered>
+				<div>{content}</div>
+			</Centered>	
+			
+			
+			
+		);
+        // return (
+		// <>
+
+		// 	<Centered>
+		// 		{content}
+		// 	</Centered> 
+		// 	<Timer timer={this.state.timer}/>
+		// </>
+		// ); 
 	}
 }
 

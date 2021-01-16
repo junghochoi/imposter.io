@@ -27,6 +27,7 @@ const  {
 	VOTE,
 	DRAWING_TASK,
 	NUMBERS_TASK,
+	FINAL_VOTE,
 	ENDGAME,
 } = require('../Views');
 
@@ -134,9 +135,9 @@ module.exports = (socket) => {
 		}
 
 		room.recordVoteAnswer(playerSocketId, votes);
-		if(room.receivedAllVotes() && room.getRoomSize() > 0){
-			io.to(roomCode).emit(SHOW_RESULTS, room.getUsersFromRoom());
-		}
+		// if(room.receivedAllVotes() && room.getRoomSize() > 0){
+		// 	io.to(roomCode).emit(SHOW_RESULTS, room.getUsersFromRoom());
+		// }
 	});
 	socket.on("debug", (callback) => {
 		console.log("-------DEBUG-------");
@@ -182,9 +183,10 @@ module.exports = (socket) => {
 		const getTime = ms => { return Date.now() + ms };
 		const timer = {
 			playerRole: 3000,
-			question: 30000,
-			vote: 30000,
-			endgame: 15000,
+			question: 3000,
+			vote: 3000,
+			finalVote: 3000,
+			endgame: 1500,
 		}
 		const room = socketRooms.get(roomCode); if (room === undefined) return;
 		const settings = room.getSettings();
@@ -197,7 +199,7 @@ module.exports = (socket) => {
 
 		for(let i = 0; i < settings.numRounds; i++){
 			console.log("Round " + (i+1));
-			io.to(roomCode).emit(SWITCH_SCREEN, PLAYER_ROLE, getTime(timer.playerRole));
+			io.to(roomCode).emit(SWITCH_SCREEN, PLAYER_ROLE, undefined, getTime(timer.playerRole));
 			await delay(timer.playerRole);
 	
 			for(let i = 0; i < settings.numTasks; i++){
@@ -209,6 +211,10 @@ module.exports = (socket) => {
 				await delay(timer.vote);
 				room.clearAnswers();
 			}
+			io.to(roomCode).emit(SWITCH_SCREEN, FINAL_VOTE, undefined, getTime(timer.finalVote));
+			await delay(timer.finalVote);
+
+
 			io.to(roomCode).emit(SWITCH_SCREEN, ENDGAME, undefined, getTime(timer.endgame));
 			await delay(timer.endgame);
 		}
