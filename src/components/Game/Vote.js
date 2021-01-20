@@ -40,6 +40,9 @@ function Vote(props) {
     
     let castVote = (e) => {
         
+        if (props.gameState.currPlayer.imposter){
+            return;
+        }
         let newVoteArr = [...voteArr];
         newVoteArr.push(e.currentTarget.dataset.vote)
         
@@ -51,8 +54,9 @@ function Vote(props) {
         setVoteArr(newVoteArr);
     }
 
-
+   
     const playerVoteCards =  responses.map(e => {
+        
         const content = {
             playerName: e.currPlayer.playerName,
             answer: e.answer,
@@ -64,6 +68,7 @@ function Vote(props) {
                 <PlayerVoteCard 
                     voted={voteArr.includes(e.currPlayer.socketId)} 
                     content={content}
+                    disabled={props.gameState.currPlayer.imposter}
                 />
             </span>
         )
@@ -73,7 +78,6 @@ function Vote(props) {
     let crewmatePrompt = '';
     
     if (props.currQuestion !== null) {
-        console.log(props.currQuestion)
         crewmatePrompt = props.currQuestion.original === undefined ? props.currQuestion : props.currQuestion.original;
     } 
     if (receivedRes) {

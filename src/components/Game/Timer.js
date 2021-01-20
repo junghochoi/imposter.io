@@ -24,7 +24,7 @@ const Bar = styled.div`
     transform-origin: left center;
 `
 function Timer(props) {
-    console.log(props.timer);
+
     return (
         <Bar  timer={props.timer}/>
     )

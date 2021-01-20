@@ -14,14 +14,20 @@ function FinalVote(props) {
     const voteArrRef = useRef(voteArr);
 
     useEffect(() => {
-        return () => socket.emit(SEND_VOTES, props.roomCode, socket.id, voteArrRef.current, 100, true);
-    }, []);
+        return () => {
+            
+            socket.emit(SEND_VOTES, props.roomCode, socket.id, voteArrRef.current, 100, true)
+        };
+    }, [props.roomCode]);
 
     useEffect(() => {
         voteArrRef.current = voteArr;
     },[voteArr])
     const  castVote = (e) => {
         
+        if (props.gameState.currPlayer.imposter){
+            return;
+        }
         let newVoteArr = [...voteArr];
         newVoteArr.push(e.currentTarget.dataset.vote)
         
@@ -35,7 +41,6 @@ function FinalVote(props) {
 
 
     const players = props.gameState.players;
-    console.log(players);
     const playerVoteCards = players.map(e => {
         const content = {
             playerName: e.playerName
@@ -46,6 +51,7 @@ function FinalVote(props) {
                 <PlayerVoteCard 
                     voted={voteArr.includes(e.socketId)} 
                     content={content}
+                    disabled={props.gameState.currPlayer.imposter}
                 />
             </span>
         )

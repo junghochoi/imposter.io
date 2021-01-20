@@ -7,7 +7,7 @@ import { DRAWING_TASK } from '../../Views';
 import { DrawingCanvas, TaskContainer } from '../../styled/GameStyles'
 import {FaUndo} from 'react-icons/fa'; 
 import { TaskPrompt } from '../../styled/GameStyles';
-import { Button, Centered } from '../../styled/Lib';
+import { Button } from '../../styled/Lib';
 function DrawingTask(props) {
     const brushSettings =  {
         color: "#ffc600",

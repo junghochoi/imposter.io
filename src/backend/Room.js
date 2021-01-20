@@ -1,4 +1,4 @@
-const { NUMBERS_TASK, QUESTION_TASK, DRAWING_TASK } = require('../Views');
+const { NUMBERS_TASK, QUESTION_TASK, DRAWING_TASK, FINAL_VOTE } = require('../Views');
 
 class Room {
     constructor(roomCode, socketObj) {
@@ -14,6 +14,9 @@ class Room {
 
         this.prevAnswers = new Set();
         this.votesReceived = 0;
+
+
+
         this.addUser(socketObj);
     }
 
@@ -108,20 +111,30 @@ class Room {
     getAnswerSize = () => {
         return this.prevAnswers.size;
     }
-    recordVoteAnswer = (playerSocketId, votesArr, pts) => {
+    recordVoteAnswer = (playerSocketId, votesArr, pts, endgame) => {
      
-        this.votesReceived += 1;
-        let player = this.playerMap.get(playerSocketId);
-        votesArr.forEach(imposterSocketId => {
-            if (this.imposterMap.has(imposterSocketId)){
         
-                player.score += pts;
-            }
+        this.votesReceived += 1;
+        console.log(this.votesReceived);
+        let player = this.playerMap.get(playerSocketId);
+
+        let totalScore = 0;
+        votesArr.forEach(socketId => {
+            if (endgame){
+                this.playerMap.get(socketId).finalVotes += 1;
+            } 
+            
+            if (this.imposterMap.has(socketId)){
+                totalScore += pts;
+            } 
         });
+        player.score.push(totalScore)
     }
 
     receivedAllVotes = () => {
+        console.log(`${this.votesReceived} ${this.playerMap.size}`);
         if (this.votesReceived >= this.playerMap.size){
+            console.log("votesReceived have been reset");
             this.votesReceived = 0;
             return true;
         }
@@ -131,7 +144,8 @@ class Room {
     resetRoom = () => {
         this.imposterMap.clear();
         this.playerMap.forEach(playerObj => {
-            playerObj.score = 0;
+            playerObj.score = [];
+            playerObj.finalVotes = 0;
         })
     }
 } 

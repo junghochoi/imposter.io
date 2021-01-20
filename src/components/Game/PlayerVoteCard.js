@@ -36,13 +36,13 @@ function PlayerVoteCard(props) {
     
     if (content === null){
         return (
-            <PlayerVoteCardStyles key={props.key} voted={props.voted} half>
+            <PlayerVoteCardStyles key={props.key} voted={props.voted} disabled={props.disabled} half>
                 <PlayerVoteName>{props.content.playerName}</PlayerVoteName> 
             </PlayerVoteCardStyles>
         )
     } else {
         return (
-            <PlayerVoteCardStyles key={props.key} voted={props.voted}>
+            <PlayerVoteCardStyles key={props.key} voted={props.voted} disabled={props.disabled}>
                 <PlayerVoteName>{props.content.playerName}</PlayerVoteName> 
                 {content}
             </PlayerVoteCardStyles>

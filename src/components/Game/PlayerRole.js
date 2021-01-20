@@ -1,6 +1,5 @@
 import React  from 'react';
 import Timer from './Timer';
-import { Centered } from '../../styled/Lib';
 import { PlayerRoleName, PlayerRoleReveal } from '../../styled/GameStyles'
 
 

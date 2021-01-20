@@ -70,7 +70,8 @@ module.exports = (socket) => {
 			roomCode: roomCode,
 			imposter: false,
 			host: true,
-			score: 0
+			score: [],
+			finalVotes: 0
 		});
 	});
 
@@ -82,7 +83,8 @@ module.exports = (socket) => {
 				roomCode: roomCode,
 				imposter: false,
 				host: false,
-				score: 0
+				score: [],
+				finalVotes: 0
 			});
 		}
 	});
@@ -134,9 +136,15 @@ module.exports = (socket) => {
 			return;
 		}
 
-		room.recordVoteAnswer(playerSocketId, votes, pts);
-		if(room.receivedAllVotes() && room.getRoomSize() > 0){
-			io.to(roomCode).emit(SHOW_RESULTS, room.getUsersFromRoom());
+		room.recordVoteAnswer(playerSocketId, votes, pts, endgame);
+		// console.log(room.getUsersFromRoom());
+		if(room.receivedAllVotes() && endgame && room.getRoomSize() > 0){
+			const users = room.getUsersFromRoom();
+			console.log('-----------------')
+			console.log(users);
+			console.log('-----------------')
+
+			io.to(roomCode).emit(SHOW_RESULTS, users);
 		}
 	});
 	socket.on("debug", (callback) => {
@@ -183,10 +191,10 @@ module.exports = (socket) => {
 		const getTime = ms => { return Date.now() + ms };
 		const timer = {
 			playerRole: 3000,
-			question: 3000,
-			vote: 3000,
-			finalVote: 3000,
-			endgame: 1500,
+			question: 1000,
+			vote: 5000,
+			finalVote: 5000,
+			endgame: 10000,
 		}
 		const room = socketRooms.get(roomCode); if (room === undefined) return;
 		const settings = room.getSettings();

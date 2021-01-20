@@ -84,17 +84,22 @@ export const PlayerVoteCardContainer = styled.div`
 `;
 
 export const PlayerVoteCardStyles = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     background-color: ${props => props.voted ? '#44a133' : '#505050' };
     padding: 6px;
     margin: 5px;
     min-width: 110px;
     min-height: ${props => props.half ? "55px" : "110px"};
+    
   
     
     border-radius: 10px;
     &:hover{
         background-color: "#8af078";
-        cursor: pointer;
+        cursor: ${props => props.disabled ?  "default" : "pointer"};
     }
 `;
 
@@ -113,6 +118,27 @@ export const PlayerVoteAnswer = styled.div`
     color: white;
     text-align: center;
     font-size: 2rem;
+
+`;
+
+//EndGame
+
+export const ImposterResultContainer = styled.div`
+    display:flex;
+    justify-content: space-around;
+
+`
+
+export const ImposterResultCard = styled.div`
+    display: ${props => props.hidden ? "hidden" : "block"};
+    text-decoration: ${props => props.votedOff ? "line-through" : "none"};
+    font-size: 1.8rem;
+    font-family: "Bitmap";
+    text-align: center;
+    padding: 5px 10px;
+    margin: 0 10px;
+    color: #cf1d1d;
+    text-shadow: 10px 10px 50px #cf1d1d;
 
 `;
 
