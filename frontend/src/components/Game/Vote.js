@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Loading from '../../views/Loading';
 import socket from '../../Socket';
 import { PlayerVoteCardContainer } from '../../styled/GameStyles';
-import  PlayerVoteCard  from '../Game/PlayerVoteCard';
+import  PlayerVoteCard  from './PlayerVoteCard';
 import { Container, Heading, Underline  } from '../../styled/Lib';
 import Timer from './Timer';
 

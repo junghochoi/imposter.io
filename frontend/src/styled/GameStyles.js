@@ -124,7 +124,7 @@ export const PlayerVoteAnswer = styled.div`
 //EndGame
 
 export const ImposterResultContainer = styled.div`
-    display:flex;
+    display: flex;
     justify-content: space-around;
 
 `
@@ -142,3 +142,17 @@ export const ImposterResultCard = styled.div`
 
 `;
 
+
+export const ScoreTable = styled.table`
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-family: "Bitmap";
+`;
+
+export const ScoreTableData = styled.td`
+    border: 1px solid black;
+    padding: 10px 20px;
+`;
+export const ScoreTableRow = styled.tr`
+    border: 1px solid black;
+`;

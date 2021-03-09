@@ -89,7 +89,7 @@ export class Game extends Component {
 			content = <FinalVote {...this.props} timer={this.state.timer}/>
 
 		}  else if (this.state.view.endGame){
-			content = <EndGame {...this.props} />
+			content = <EndGame {...this.props} timer={this.state.timer} />
 		}  else {
 			content = <Loading />
 		}

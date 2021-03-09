@@ -3,7 +3,7 @@ import Timer from './Timer';
 import socket from '../../Socket';
 import { Container, Heading, Underline } from '../../styled/Lib';
 import { PlayerVoteCardContainer } from '../../styled/GameStyles';
-import PlayerVoteCard from '../../components/Game/PlayerVoteCard';
+import PlayerVoteCard from './PlayerVoteCard';
 import {
     SEND_VOTES 
 } from '../../Events';

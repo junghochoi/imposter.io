@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { SHOW_RESULTS } from "../../Events";
 import { Container, Heading } from "../../styled/Lib";
+import Timer from './Timer'
 
 import {
 	ImposterResultCard,
-	ImposterResultContainer,
+    ImposterResultContainer,
+    ScoreTable,
+    ScoreTableRow,
+    ScoreTableData,
 } from "../../styled/GameStyles";
 import socket from "../../Socket";
 function EndGame(props) {
@@ -65,44 +69,59 @@ function EndGame(props) {
 				</ImposterResultCard>
 			</span>
 		);
-	});
-	const scores = players.map((playerObj) => {
+    });
+    
+    const roundTableHeaders = [];
+    roundTableHeaders.push(<ScoreTableData>Player</ScoreTableData>)
+    roundTableHeaders.push(<ScoreTableData># of Votes</ScoreTableData>)
+    for (let i = 1; i <= props.gameState.settings.numTasks; i++){
+        roundTableHeaders.push(<ScoreTableData>Round {i}</ScoreTableData>);
+    }
+    roundTableHeaders.push(<ScoreTableData>Final Vote</ScoreTableData>)
+    roundTableHeaders.push(<ScoreTableData>Total</ScoreTableData>);
 
+
+	const scores = players.map((playerObj) => {
 
         let totalPoints = 0;
 		const roundScores = playerObj.score.map((score, i) => {
             totalPoints += score;
             return (
-			    <td key={`${playerObj.socketId}-score-${i}`}>{score}</td>
+			    <ScoreTableData key={`${playerObj.socketId}-score-${i}`}>{score}</ScoreTableData>
             )
-        });
+        }); 
+
         const tableRow = [
-            <td key={playerObj.socketId}>{playerObj.playerName}</td>,
-            <td key={`${playerObj.socketId}-votes`}>{playerObj.finalVotes} Votes</td>,
+            <ScoreTableData key={playerObj.socketId}>{playerObj.playerName}</ScoreTableData>,
+            <ScoreTableData key={`${playerObj.socketId}-votes`}>{playerObj.finalVotes} Votes</ScoreTableData>,
             ...roundScores,
-            <td key={`${playerObj.socketId}-finalScore`}>{totalPoints}</td>
+            <ScoreTableData key={`${playerObj.socketId}-finalScore`}>{totalPoints}</ScoreTableData>
         ];
-        
-        
 
 		return (
-			<tr key={playerObj.socketId}>
+			<ScoreTableRow key={playerObj.socketId}>
 				{tableRow}
-			</tr>
+			</ScoreTableRow>
 		);
-	});
+    });
+    
 	return (
+        
 		<Container>
 			<Heading>Results</Heading>
 			<Heading>Imposters</Heading>
 			<ImposterResultContainer>{imposterCards}</ImposterResultContainer>
 			<Heading>Scores</Heading>
-			<table>
+			<ScoreTable>
+                <thead>
+                    {roundTableHeaders}
+                </thead>
                 <tbody>
                     {scores}
                 </tbody>
                 
-            </table>
+            </ScoreTable>
+            <Timer timer={props.timer} />
 		</Container>
 	);
 }
