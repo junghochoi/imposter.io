@@ -22,9 +22,10 @@ const Bar = styled.div`
     animation-timing-function: linear;
     animation-iteration-count: 1;
     transform-origin: left center;
+    animation-fill-mode: forwards;
 `
 function Timer(props) {
-
+    console.log(props.timer);
     return (
         <Bar  timer={props.timer}/>
     )
