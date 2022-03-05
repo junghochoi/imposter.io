@@ -10,6 +10,8 @@ function PlayerRole(props) {
     if (props.gameState.currPlayer !== null) {
         role =  props.gameState.currPlayer.imposter ? 'IMPOSTER' : 'CREWMATE'
     }
+
+
     return (
         <>
         
@@ -17,7 +19,7 @@ function PlayerRole(props) {
         <PlayerRoleReveal imposter={props.gameState.currPlayer.imposter}>{role}</ PlayerRoleReveal>
             
         
-        <Timer timer={props.timer} />
+        <Timer timer={props.timer}/>
         </>
         
     )

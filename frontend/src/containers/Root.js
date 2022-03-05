@@ -113,7 +113,7 @@ export class Root extends Component {
 					/>
 
 				</Switch>
-				<Debug />
+				{/* <Debug /> */}
 				
 			</Router>
 		

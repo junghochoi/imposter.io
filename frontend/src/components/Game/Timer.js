@@ -18,7 +18,7 @@ const Bar = styled.div`
     bottom: 0;
 
     animation-name: ${countDownAnimation};
-    animation-duration: ${props => props.timer}ms;
+    animation-duration: ${props => props.sec}ms;
     animation-timing-function: linear;
     animation-iteration-count: 1;
     transform-origin: left center;
@@ -27,7 +27,7 @@ const Bar = styled.div`
 function Timer(props) {
     console.log(props.timer);
     return (
-        <Bar  timer={props.timer}/>
+        <Bar  sec={props.timer}/>
     )
 }
 

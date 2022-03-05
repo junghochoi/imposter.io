@@ -20,7 +20,7 @@ export class Game extends Component {
 		super(props);
 
 		this.state = {
-			timer: 3000,
+			timer: 90000,
 			currQuestion: null,
 			view: {
 				playerRole: true,
@@ -57,7 +57,8 @@ export class Game extends Component {
 				newViews[nextView] = true;
 
 				return {
-					timer: timestamp - Date.now(),
+					// timer: timestamp - Date.now(),
+					timer: timestamp,
 					currQuestion: question,
 					view: newViews,
 				};
@@ -70,7 +71,6 @@ export class Game extends Component {
 		socket.off(SWITCH_SCREEN);
 	}
     
-
 
 	render() {
 		
@@ -103,15 +103,7 @@ export class Game extends Component {
 			
 			
 		);
-        // return (
-		// <>
-
-		// 	<Centered>
-		// 		{content}
-		// 	</Centered> 
-		// 	<Timer timer={this.state.timer}/>
-		// </>
-		// ); 
+        
 	}
 }
 
