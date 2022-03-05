@@ -20,7 +20,7 @@ export class Game extends Component {
 		super(props);
 
 		this.state = {
-			timer: 90000,
+			timer: 0,
 			currQuestion: null,
 			view: {
 				playerRole: true,
@@ -58,7 +58,7 @@ export class Game extends Component {
 
 				return {
 					// timer: timestamp - Date.now(),
-					timer: timestamp,
+					timer: timestamp - Date.now(),
 					currQuestion: question,
 					view: newViews,
 				};
